@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estimate App</title>
+    <title>Estimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -41,7 +42,7 @@
 </head>
 <body class="p-4 bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="container bg-white p-6 rounded-xl shadow-lg w-full">
-        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Estimate App</h1>
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Estimate</h1>
         
         <!-- Creator View: To create an estimate -->
         <div id="creator-view">
@@ -54,7 +55,6 @@
                             <label for="customer-name" class="block text-sm font-medium text-gray-700">Customer Name</label>
                             <div class="relative mt-1">
                                 <input type="text" id="customer-name" name="customer-name" class="block w-full p-2.5 pr-12" placeholder="e.g., Rahul Sharma">
-                                <!-- Phone book button -->
                                 <button type="button" id="open-contacts-btn" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 hover:text-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M22 6.5A1.5 1.5 0 0020.5 5h-17A1.5 1.5 0 002 6.5v11A1.5 1.5 0 003.5 19h17a1.5 1.5 0 001.5-1.5v-11zM10 8.5A2.5 2.5 0 115 8.5a2.5 2.5 0 015 0zM17.5 15.5a4.5 4.5 0 00-9 0H7a5.5 5.5 0 0111 0h-1.5z"></path>
@@ -77,6 +77,15 @@
                                 <input type="date" id="date" name="date" class="mt-1 block w-full p-2.5">
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Work Title -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Work Title</h2>
+                    <div>
+                        <label for="work-title" class="block text-sm font-medium text-gray-700">Work Title</label>
+                        <input type="text" id="work-title" name="work-title" class="mt-1 block w-full p-2.5" placeholder="e.g., Electrical Wiring & Fixture Installation">
                     </div>
                 </div>
 
@@ -103,14 +112,18 @@
                                     </svg>
                                 </button>
                             </div>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-4 gap-2">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                                    <input type="number" class="item-quantity mt-1 block w-full p-2.5" value="1" min="1">
+                                    <input type="number" class="item-quantity mt-1 block w-full p-2.5" placeholder="e.g., 1" min="1">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Unit</label>
+                                    <input type="text" class="item-unit mt-1 block w-full p-2.5" placeholder="e.g., Pcs">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Rate</label>
-                                    <input type="number" class="item-rate mt-1 block w-full p-2.5" value="0" min="0">
+                                    <input type="number" class="item-rate mt-1 block w-full p-2.5" placeholder="e.g., 100" min="0">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Total</label>
@@ -132,7 +145,7 @@
                     </div>
                     <div class="flex justify-between font-semibold text-gray-700">
                         <label for="discount-amount">Discount</label>
-                        <input type="number" id="discount-amount" name="discount-amount" class="w-24 p-1 text-right" value="0" min="0">
+                        <input type="number" id="discount-amount" name="discount-amount" class="w-24 p-1 text-right" placeholder="0" min="0">
                     </div>
                     <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
                         <span>Grand Total</span>
@@ -158,12 +171,23 @@
                         <button type="button" id="share-whatsapp-btn" class="w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition duration-200">
                             Share on WhatsApp
                         </button>
-                        <button type="button" id="new-estimate-btn" class="w-full bg-indigo-500 text-white p-3 rounded-lg font-semibold hover:bg-indigo-600 transition duration-200">
+                        <button type="button" id="generate-pdf-btn" class="w-full bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 transition duration-200">
+                            Generate PDF
+                        </button>
+                        <button type="button" id="new-estimate-btn" class="w-full bg-indigo-500 text-white p-3 rounded-lg font-semibold hover:bg-indigo-600 transition duration-200 col-span-2">
                             New Estimate
                         </button>
                     </div>
                 </div>
             </form>
+            
+            <!-- Saved Estimates List -->
+            <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                <h2 class="text-xl font-semibold mb-3 text-gray-700">Saved Estimates</h2>
+                <div id="saved-estimates-list" class="space-y-2">
+                    <div class="text-center text-gray-500">Loading saved estimates...</div>
+                </div>
+            </div>
         </div>
 
         <!-- Customer View: To view and accept the estimate -->
@@ -173,6 +197,10 @@
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Information</h2>
                     <div class="read-only-display space-y-2">
+                        <div>
+                            <span class="block text-sm font-medium text-gray-700">Work Title:</span>
+                            <span id="work-title-display" class="block mt-1 p-2.5 text-lg"></span>
+                        </div>
                         <div>
                             <span class="block text-sm font-medium text-gray-700">Customer Name:</span>
                             <span id="customer-name-display" class="block mt-1 p-2.5 text-lg"></span>
@@ -213,6 +241,21 @@
                     <div id="amount-in-words-display" class="text-sm italic text-gray-600"></div>
                 </div>
 
+                <!-- Terms and Conditions -->
+                <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Terms and Conditions</h2>
+                    <ol class="list-decimal list-inside text-sm text-gray-700 space-y-1">
+                        <li>Advance: 50% payment first if budget is finalized.</li>
+                        <li>35% during work.</li>
+                        <li>15% within 7 days after completion.</li>
+                        <li>Extra work billed separately.</li>
+                        <li>Verify work at completion—no excuses later.</li>
+                        <li>No warranty for materials.</li>
+                        <li>Any changes require separate payment.</li>
+                        <li>Estimate valid for 7 days.</li>
+                    </ol>
+                </div>
+
                 <!-- Message Box -->
                 <div id="message-box-customer" class="hidden text-center text-sm p-3 rounded-lg font-medium"></div>
 
@@ -237,22 +280,23 @@
             const messageBoxCustomer = document.getElementById('message-box-customer');
 
             // --- Google Sheets Integration Setup ---
-            // इथे तुमच्या दोन्ही Apps Script Web App चा URL पेस्ट करा
-            const googleSheetPostUrl = 'https://script.google.com/macros/s/AKfycbzvNcf7sgWgIO5gsWw9MRYhXZIFLD1ct1Ha1ZPbhpH43UhS-XHCdt8pDecnhjJFV0uH/exec'; // डेटा सेव्ह करण्यासाठी
-            const googleSheetGetUrl = 'https://script.google.com/macros/s/AKfycbzvNcf7sgWgIO5gsWw9MRYhXZIFLD1ct1Ha1ZPbhpH43UhS-XHCdt8pDecnhjJFV0uH/exec?action=getcount';  // एस्टिमेटची संख्या मिळवण्यासाठी
+            // तुमच्या दिलेल्या URL नुसार इथे बदल केला आहे
+            const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzvNcf7sgWgIO5gsWw9MRYhXZIFLD1ct1Ha1ZPbhpH43UhS-XHCdt8pDecnhjJFV0uH/exec';
             
-            // डेटा Google Sheets मध्ये सेव्ह करण्यासाठी
-            const saveToGoogleSheet = async (data) => {
-                if (!googleSheetPostUrl) {
-                    console.error('Google Sheet POST URL is not configured.');
+            const postDataToGoogleSheet = async (data) => {
+                if (!googleScriptUrl) {
+                    console.error('Google Script URL is not configured.');
                     return;
                 }
+                const payload = new FormData();
+                payload.append('action', data.action);
+                payload.append('data', JSON.stringify(data.data));
+
                 try {
-                    await fetch(googleSheetPostUrl, {
+                    const response = await fetch(googleScriptUrl, {
                         method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data),
+                        body: payload,
+                        mode: 'no-cors'
                     });
                     console.log('Data sent to Google Sheets successfully.');
                 } catch (error) {
@@ -261,24 +305,25 @@
                 }
             };
 
-            // Google Sheets मधून एस्टिमेटची संख्या मिळवण्यासाठी
-            const getEstimateCount = async () => {
-                if (!googleSheetGetUrl) {
-                    console.error('Google Sheet GET URL is not configured.');
-                    return 0;
+            const getEstimateFromSheet = async (action, estimateNumber = null) => {
+                if (!googleScriptUrl) {
+                    console.error('Google Script URL is not configured.');
+                    return;
+                }
+                let url = `${googleScriptUrl}?action=${action}`;
+                if (estimateNumber) {
+                    url += `&estimateNumber=${encodeURIComponent(estimateNumber)}`;
                 }
                 try {
-                    // Fetch request to the GET endpoint
-                    const response = await fetch(googleSheetGetUrl);
+                    const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    const data = await response.json();
-                    return data.count || 0;
+                    return await response.json();
                 } catch (error) {
-                    console.error('Error fetching estimate count from Google Sheets:', error);
-                    showMessage(messageBoxCreator, 'Google Sheets मधून एस्टिमेट नंबर मिळवताना चूक झाली. ॲप स्थानिक नंबर वापरेल.', 'red');
-                    return 0;
+                    console.error('Error fetching data from Google Sheets:', error);
+                    showMessage(messageBoxCreator, 'Google Sheets मधून डेटा मिळवताना चूक झाली.', 'red');
+                    return null;
                 }
             };
             // --- End Google Sheets Integration Setup ---
@@ -339,6 +384,7 @@
                         if (savedData) {
                             const decodedData = JSON.parse(savedData);
                             
+                            document.getElementById('work-title-display').textContent = decodedData.workTitle || '';
                             document.getElementById('customer-name-display').textContent = decodedData.customerName || '';
                             document.getElementById('estimate-number-display').textContent = decodedData.estimateNumber || '';
                             document.getElementById('date-display').textContent = decodedData.date || '';
@@ -357,19 +403,26 @@
                                 itemRow.innerHTML = `
                                     <div class="font-medium text-gray-800">${item.name}</div>
                                     ${item.description ? `<div class="text-sm text-gray-600 mb-2">${item.description}</div>` : ''}
-                                    <div class="text-sm text-gray-600">Quantity: ${item.quantity} | Rate: ₹ ${parseFloat(item.rate).toFixed(2)} | Total: ₹ ${parseFloat(item.total).toFixed(2)}</div>
+                                    <div class="text-sm text-gray-600">Quantity: ${item.quantity} ${item.unit} | Rate: ₹ ${parseFloat(item.rate).toFixed(2)} | Total: ₹ ${parseFloat(item.total).toFixed(2)}</div>
                                 `;
                                 itemsContainerDisplay.appendChild(itemRow);
                             });
 
-                            acceptBtn.addEventListener('click', () => {
+                            acceptBtn.addEventListener('click', async () => {
                                 const creatorWhatsapp = decodedData.creatorWhatsapp;
                                 const estimateNumber = decodedData.estimateNumber;
-
+                                
                                 if (!creatorWhatsapp) {
                                     showMessage(messageBoxCustomer, 'Creator\'s WhatsApp number is not available.', 'red');
                                     return;
                                 }
+
+                                // Update the status in Google Sheet
+                                const dataToUpdate = {
+                                    estimateNumber: estimateNumber,
+                                    status: 'Accepted'
+                                };
+                                await postDataToGoogleSheet({ action: 'updateStatus', data: dataToUpdate });
                                 
                                 let message = `Hello, estimate number ${estimateNumber} has been accepted by the customer.`;
                                 const whatsappUrl = `https://wa.me/${creatorWhatsapp}?text=${encodeURIComponent(message)}`;
@@ -404,20 +457,87 @@
                 const openContactsBtn = document.getElementById('open-contacts-btn');
                 const customerNameInput = document.getElementById('customer-name');
                 const customerWhatsappInput = document.getElementById('customer-whatsapp');
-
-                // Function to handle estimate number generation based on Google Sheet
+                const workTitleInput = document.getElementById('work-title');
+                const generatePdfBtn = document.getElementById('generate-pdf-btn');
+                const savedEstimatesList = document.getElementById('saved-estimates-list');
+                
                 const generateNewEstimateNumber = async () => {
                     const today = new Date();
                     const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
                     dateInput.value = formattedDate;
 
-                    const rowCount = await getEstimateCount();
-                    // Google Sheet मध्ये header साठी 1 row असते, म्हणून count + 1
-                    const newCount = rowCount + 1;
+                    const savedEstimates = await getEstimateFromSheet('getall');
+                    const newCount = savedEstimates ? savedEstimates.length + 1 : 1;
                     
                     const formattedCount = String(newCount).padStart(3, '0');
                     const newEstimateNumber = `EST-${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}-${formattedCount}`;
                     estimateNumberInput.value = newEstimateNumber;
+                    
+                    renderSavedEstimates(savedEstimates);
+                };
+
+                const renderSavedEstimates = (estimates) => {
+                    savedEstimatesList.innerHTML = '';
+                    if (!estimates || estimates.length === 0) {
+                        savedEstimatesList.innerHTML = '<div class="text-center text-gray-500">No saved estimates found.</div>';
+                        return;
+                    }
+                    estimates.forEach(estimate => {
+                        const row = document.createElement('div');
+                        row.className = 'flex justify-between items-center bg-white p-3 rounded-lg shadow-sm';
+                        row.innerHTML = `
+                            <div class="flex-grow">
+                                <div class="font-semibold text-gray-800">${estimate['Estimate Number']} - ${estimate['Customer Name']}</div>
+                                <div class="text-sm text-gray-600">${estimate['Work Title'] || 'No Title'}</div>
+                            </div>
+                            <div class="flex space-x-2 ml-4">
+                                <button type="button" class="load-btn text-blue-500 hover:text-blue-700 font-medium" data-estimate-number="${estimate['Estimate Number']}">Load</button>
+                                <button type="button" class="delete-btn text-red-500 hover:text-red-700 font-medium" data-estimate-number="${estimate['Estimate Number']}">Delete</button>
+                            </div>
+                        `;
+                        savedEstimatesList.appendChild(row);
+                    });
+                };
+                
+                savedEstimatesList.addEventListener('click', async (e) => {
+                    if (e.target.classList.contains('load-btn')) {
+                        const estimateNumber = e.target.dataset.estimateNumber;
+                        const estimateData = await getEstimateFromSheet('getsingle', estimateNumber);
+                        if (estimateData) {
+                            fillFormWithData(estimateData);
+                            showMessage(messageBoxCreator, `Estimate ${estimateNumber} loaded successfully.`, 'green');
+                        }
+                    } else if (e.target.classList.contains('delete-btn')) {
+                        const estimateNumber = e.target.dataset.estimateNumber;
+                        const confirmDelete = window.confirm(`Are you sure you want to delete estimate number ${estimateNumber}?`);
+                        if (confirmDelete) {
+                            await postDataToGoogleSheet({ action: 'delete', data: { estimateNumber } });
+                            await generateNewEstimateNumber(); // Refresh list
+                            showMessage(messageBoxCreator, `Estimate ${estimateNumber} deleted successfully.`, 'green');
+                        }
+                    }
+                });
+
+                const fillFormWithData = (data) => {
+                    customerNameInput.value = data['Customer Name'] || '';
+                    customerWhatsappInput.value = data['Customer\'s WhatsApp Number'] || '';
+                    estimateNumberInput.value = data['Estimate Number'] || '';
+                    dateInput.value = data['Date'] || '';
+                    workTitleInput.value = data['Work Title'] || '';
+                    discountAmountInput.value = parseFloat(data['Discount'].replace(/[^0-9.]/g, '')) || 0;
+                    
+                    itemsContainer.innerHTML = '';
+                    const items = JSON.parse(data['Items']);
+                    items.forEach(item => {
+                        const newItem = createItemRow();
+                        newItem.querySelector('.item-name').value = item.name;
+                        newItem.querySelector('.item-description').value = item.description;
+                        newItem.querySelector('.item-quantity').value = item.quantity;
+                        newItem.querySelector('.item-unit').value = item.unit;
+                        newItem.querySelector('.item-rate').value = item.rate;
+                        itemsContainer.appendChild(newItem);
+                    });
+                    calculateTotals();
                 };
 
                 const calculateTotals = () => {
@@ -464,14 +584,18 @@
                                 </svg>
                             </button>
                         </div>
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-4 gap-2">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                                <input type="number" class="item-quantity mt-1 block w-full p-2.5" value="1" min="1">
+                                <input type="number" class="item-quantity mt-1 block w-full p-2.5" placeholder="e.g., 1" min="1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Unit</label>
+                                <input type="text" class="item-unit mt-1 block w-full p-2.5" placeholder="e.g., Pcs">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Rate</label>
-                                <input type="number" class="item-rate mt-1 block w-full p-2.5" value="0" min="0">
+                                <input type="number" class="item-rate mt-1 block w-full p-2.5" placeholder="e.g., 100" min="0">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Total</label>
@@ -491,10 +615,11 @@
                 newEstimateBtn.addEventListener('click', async () => {
                     customerNameInput.value = '';
                     customerWhatsappInput.value = '';
-                    discountAmountInput.value = '0';
+                    discountAmountInput.value = '';
+                    workTitleInput.value = '';
                     itemsContainer.innerHTML = '';
                     itemsContainer.appendChild(createItemRow());
-                    await generateNewEstimateNumber(); // Wait for the new number
+                    await generateNewEstimateNumber();
                     calculateTotals();
                     showMessage(messageBoxCreator, 'New estimate form is ready!', 'green');
                 });
@@ -550,11 +675,12 @@
                 });
 
                 shareWhatsappBtn.addEventListener('click', async () => {
-                    const customerWhatsapp = document.getElementById('customer-whatsapp').value;
-                    const customerName = document.getElementById('customer-name').value;
-                    const estimateNumber = document.getElementById('estimate-number').value;
-                    const date = document.getElementById('date').value;
+                    const customerWhatsapp = customerWhatsappInput.value;
+                    const customerName = customerNameInput.value;
+                    const estimateNumber = estimateNumberInput.value;
+                    const date = dateInput.value;
                     const creatorWhatsapp = creatorWhatsappInput.value;
+                    const workTitle = workTitleInput.value;
                     
                     if (!customerWhatsapp || !customerName || !estimateNumber || !date || !creatorWhatsapp) {
                         showMessage(messageBoxCreator, 'Please fill in all required information.', 'red');
@@ -566,13 +692,14 @@
                         const itemName = row.querySelector('.item-name').value;
                         const itemDescription = row.querySelector('.item-description').value;
                         const itemQuantity = row.querySelector('.item-quantity').value;
+                        const itemUnit = row.querySelector('.item-unit').value;
                         const itemRate = row.querySelector('.item-rate').value;
                         const itemTotal = row.querySelector('.item-total').value;
-                        items.push({ name: itemName, description: itemDescription, quantity: itemQuantity, rate: itemRate, total: itemTotal });
+                        items.push({ name: itemName, description: itemDescription, quantity: itemQuantity, unit: itemUnit, rate: itemRate, total: itemTotal });
                     });
                     
                     const subtotal = subtotalEl.textContent;
-                    const discount = discountAmountInput.value;
+                    const discount = discountAmountInput.value || 0;
                     const grandTotal = grandTotalEl.textContent;
 
                     const estimateData = {
@@ -583,27 +710,138 @@
                         subtotal,
                         discount,
                         grandTotal,
-                        creatorWhatsapp
+                        creatorWhatsapp,
+                        workTitle
                     };
                     
-                    await saveToGoogleSheet({
-                        'Customer Name': customerName,
-                        'Estimate Number': estimateNumber,
-                        'Date': date,
-                        'Items': JSON.stringify(items),
-                        'Subtotal': subtotal,
-                        'Discount': discount,
-                        'Grand Total': grandTotal
+                    await postDataToGoogleSheet({
+                        action: 'save',
+                        data: {
+                            'Customer Name': customerName,
+                            'Customer\'s WhatsApp Number': customerWhatsapp,
+                            'Estimate Number': estimateNumber,
+                            'Date': date,
+                            'Work Title': workTitle,
+                            'Items': JSON.stringify(items),
+                            'Subtotal': subtotal,
+                            'Discount': `₹ ${parseFloat(discount).toFixed(2)}`,
+                            'Grand Total': grandTotal,
+                            'Status': 'Sent'
+                        }
                     });
                     
-                    const estimateId = `estimate_${Date.now()}`;
+                    const estimateId = estimateNumber;
                     localStorage.setItem(estimateId, JSON.stringify(estimateData));
-                    const shareUrl = `${window.location.origin}${window.location.pathname}?view=customer&id=${estimateId}`;
-                    const message = `Hello ${customerName},\n\nYour estimate is ready.\nEstimate Number: ${estimateNumber}\nGrand Total: ${grandTotal}\n\nClick this link to view and accept the estimate: ${shareUrl}`;
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?view=customer&id=${encodeURIComponent(estimateId)}`;
+                    
+                    const termsAndConditions = `
+**Terms and Conditions:**
+1. Advance: 50% payment first if budget is finalized.
+2. 35% during work.
+3. 15% within 7 days after completion.
+4. Extra work billed separately.
+5. Verify work at completion—no excuses later.
+6. No warranty for materials.
+7. Any changes require separate payment.
+8. Estimate valid for 7 days.
+                    `;
+
+                    let message = '';
+                    if (workTitle) {
+                        message += `Work Title: ${workTitle}\n\n`;
+                    }
+                    message += `Hello ${customerName},\n\nYour estimate is ready. You can find our website at www.vaibhaventerprises.info.\n\nEstimate Number: ${estimateNumber}\nGrand Total: ${grandTotal}\n\n${termsAndConditions}\n\nClick this link to view and accept the estimate: ${shareUrl}`;
+                    
                     const whatsappUrl = `https://wa.me/${customerWhatsapp}?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                     showMessage(messageBoxCreator, 'Estimate shared on WhatsApp!', 'green');
                     await generateNewEstimateNumber();
+                });
+
+                // PDF Generation Logic
+                generatePdfBtn.addEventListener('click', () => {
+                    const customerName = customerNameInput.value;
+                    if (!customerName) {
+                        showMessage(messageBoxCreator, 'Please enter a customer name to generate the PDF.', 'red');
+                        return;
+                    }
+
+                    // Create a temporary element to hold the content for the PDF
+                    const pdfContent = document.createElement('div');
+                    pdfContent.className = 'p-6 bg-white';
+                    pdfContent.innerHTML = `
+                        <h1 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 24px;">Estimate</h1>
+                        
+                        <div style="margin-bottom: 24px;">
+                            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">Customer Information</h2>
+                            <div style="font-size: 14px;">
+                                <div><span style="font-weight: 600;">Work Title:</span> ${workTitleInput.value}</div>
+                                <div><span style="font-weight: 600;">Customer Name:</span> ${customerNameInput.value}</div>
+                                <div><span style="font-weight: 600;">Estimate Number:</span> ${estimateNumberInput.value}</div>
+                                <div><span style="font-weight: 600;">Date:</span> ${dateInput.value}</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 24px;">
+                            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">Items List</h2>
+                            <div style="font-size: 14px;">
+                                <!-- Items List will be populated dynamically -->
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 24px;">
+                            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">Summary</h2>
+                            <div style="font-size: 14px;">
+                                <div style="display: flex; justify-content: space-between;"><span>Subtotal</span><span>${subtotalEl.textContent}</span></div>
+                                <div style="display: flex; justify-content: space-between;"><span>Discount</span><span>₹ ${parseFloat(discountAmountInput.value).toFixed(2)}</span></div>
+                                <div style="display: flex; justify-content: space-between; font-weight: bold;"><span>Grand Total</span><span>${grandTotalEl.textContent}</span></div>
+                                <div style="font-style: italic;">${amountInWordsEl.textContent}</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 24px;">
+                            <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">Terms and Conditions</h2>
+                            <ol style="font-size: 14px; padding-left: 20px;">
+                                <li>Advance: 50% payment first if budget is finalized.</li>
+                                <li>35% during work.</li>
+                                <li>15% within 7 days after completion.</li>
+                                <li>Extra work billed separately.</li>
+                                <li>Verify work at completion—no excuses later.</li>
+                                <li>No warranty for materials.</li>
+                                <li>Any changes require separate payment.</li>
+                                <li>Estimate valid for 7 days.</li>
+                            </ol>
+                        </div>
+                    `;
+
+                    const itemsListHtml = pdfContent.querySelector('div:nth-child(3) > div');
+                    document.querySelectorAll('.item-row').forEach(row => {
+                        const itemHtml = document.createElement('div');
+                        const itemName = row.querySelector('.item-name').value;
+                        const itemDescription = row.querySelector('.item-description').value;
+                        const itemQuantity = row.querySelector('.item-quantity').value;
+                        const itemUnit = row.querySelector('.item-unit').value;
+                        const itemRate = row.querySelector('.item-rate').value;
+                        const itemTotal = row.querySelector('.item-total').value;
+                        itemHtml.innerHTML = `
+                            <div style="font-weight: 600;">${itemName}</div>
+                            ${itemDescription ? `<div style="font-size: 12px; color: #6b7280;">${itemDescription}</div>` : ''}
+                            <div style="font-size: 12px; color: #6b7280;">Quantity: ${itemQuantity} ${itemUnit} | Rate: ₹ ${parseFloat(itemRate).toFixed(2)} | Total: ₹ ${parseFloat(itemTotal).toFixed(2)}</div>
+                            <br>
+                        `;
+                        itemsListHtml.appendChild(itemHtml);
+                    });
+
+                    // Generate PDF
+                    html2pdf().from(pdfContent).set({
+                        margin: 10,
+                        filename: `Estimate_${customerName}_${estimateNumberInput.value}.pdf`,
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    }).save();
+
+                    pdfContent.remove(); // Clean up the temporary element
+                    showMessage(messageBoxCreator, 'PDF generated successfully!', 'green');
                 });
 
                 calculateTotals();
