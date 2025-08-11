@@ -51,17 +51,19 @@
     <div class="container-fluid bg-white p-6 rounded-xl shadow-lg w-full md:max-w-lg">
         <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Estimate</h1>
         
-        <!-- Creator View: For creating the estimate -->
+        <div id="loading-screen" class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+        </div>
+        
         <div id="creator-view">
             <form id="estimate-form" class="space-y-4">
-                <!-- Customer Information -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Information</h2>
                     <div class="space-y-2">
                         <div>
                             <label for="customer-name" class="block text-sm font-medium text-gray-700">Customer Name</label>
                             <div class="relative mt-1">
-                                <input type="text" id="customer-name" name="customer-name" class="block w-full p-2.5 pr-12" placeholder="e.g., Rahul Sharma">
+                                <input type="text" id="customer-name" name="customer-name" class="block w-full p-2.5 pr-12" placeholder="e.g., Rahul Sharma" required>
                                 <button type="button" id="open-contacts-btn" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 hover:text-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M22 6.5A1.5 1.5 0 0020.5 5h-17A1.5 1.5 0 002 6.5v11A1.5 1.5 0 003.5 19h17a1.5 1.5 0 001.5-1.5v-11zM10 8.5A2.5 2.5 0 115 8.5a2.5 2.5 0 015 0zM17.5 15.5a4.5 4.5 0 00-9 0H7a5.5 5.5 0 0111 0h-1.5z"></path>
@@ -72,87 +74,46 @@
                         </div>
                         <div>
                             <label for="customer-whatsapp" class="block text-sm font-medium text-gray-700">Customer's WhatsApp Number</label>
-                            <input type="text" id="customer-whatsapp" name="customer-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210">
+                            <input type="tel" id="customer-whatsapp" name="customer-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210" required>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label for="estimate-number" class="block text-sm font-medium text-gray-700">Estimate Number</label>
-                                <input type="text" id="estimate-number" name="estimate-number" class="mt-1 block w-full p-2.5" placeholder="e.g., EST-001" readonly>
+                                <input type="text" id="estimate-number" name="estimate-number" class="mt-1 block w-full p-2.5" placeholder="e.g., EST-001" readonly required>
                             </div>
                             <div>
                                 <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                                <input type="date" id="date" name="date" class="mt-1 block w-full p-2.5">
+                                <input type="date" id="date" name="date" class="mt-1 block w-full p-2.5" required>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Work Title -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Work Title</h2>
                     <div>
                         <label for="work-title" class="block text-sm font-medium text-gray-700">Work Title</label>
-                        <input type="text" id="work-title" name="work-title" class="mt-1 block w-full p-2.5" placeholder="e.g., Electrical Wiring">
+                        <input type="text" id="work-title" name="work-title" class="mt-1 block w-full p-2.5" placeholder="e.g., Electrical Wiring" required>
                     </div>
                 </div>
 
-                <!-- Item List -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
                     <div id="items-container" class="space-y-4">
-                        <!-- First item row -->
-                        <div class="item-row bg-white p-3 rounded-lg shadow-sm">
-                            <div class="flex items-start justify-between mb-2">
-                                <div class="w-full space-y-2">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Item Name</label>
-                                        <input type="text" class="item-name mt-1 block w-full p-2.5" placeholder="e.g., Labor Cost">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700">Description</label>
-                                        <textarea class="item-description mt-1 block w-full p-2.5" rows="2" placeholder="e.g., Installation of 100 ft wiring and setup."></textarea>
-                                    </div>
-                                </div>
-                                <button type="button" class="delete-item-btn ml-2 mt-1 p-2 text-red-500 hover:text-red-700 transition duration-200" title="Delete Item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.013 21H7.987a2 2 0 01-1.92-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-4 gap-2">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                                    <input type="number" class="item-quantity mt-1 block w-full p-2.5" placeholder="e.g., 1" min="1">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Unit</label>
-                                    <input type="text" class="item-unit mt-1 block w-full p-2.5" placeholder="e.g., Pcs">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Rate</label>
-                                    <input type="number" class="item-rate mt-1 block w-full p-2.5" placeholder="e.g., 100" min="0">
-                            </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Total</label>
-                                    <input type="text" class="item-total mt-1 block w-full p-2.5 bg-gray-100" readonly>
-                                </div>
-                            </div>
                         </div>
-                    </div>
                     <button type="button" id="add-item-btn" class="mt-4 w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-200">
                         Add Item
                     </button>
                 </div>
 
-                <!-- Summary -->
                 <div class="bg-gray-50 p-4 rounded-lg space-y-2">
                     <div class="flex justify-between font-semibold text-gray-700">
                         <span>Subtotal</span>
                         <span id="subtotal">₹ 0.00</span>
                     </div>
                     <div class="flex justify-between font-semibold text-gray-700">
-                        <label for="discount-amount">Discount</label>
-                        <input type="number" id="discount-amount" name="discount-amount" class="w-24 p-1 text-right" placeholder="0" min="0">
+                        <label for="discount-amount">Discount (%)</label>
+                        <input type="number" id="discount-amount" name="discount-amount" class="w-24 p-1 text-right" placeholder="0" min="0" value="0">
                     </div>
                     <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
                         <span>Grand Total</span>
@@ -161,17 +122,14 @@
                     <div id="amount-in-words" class="text-sm italic text-gray-600"></div>
                 </div>
 
-                <!-- Message box -->
                 <div id="message-box-creator" class="hidden text-center text-sm p-3 rounded-lg font-medium"></div>
 
-                <!-- Share and New Estimate Buttons -->
                 <div class="bg-gray-50 p-4 rounded-lg mt-4 space-y-3">
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Share Estimate</h2>
                     
-                    <!-- Your WhatsApp Number for Notifications -->
                     <div>
                         <label for="creator-whatsapp" class="block text-sm font-medium text-gray-700">Your WhatsApp Number (for notifications)</label>
-                        <input type="text" id="creator-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210">
+                        <input type="tel" id="creator-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -181,96 +139,89 @@
                         <button type="button" id="generate-pdf-btn" class="w-full bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 transition duration-200">
                             Generate PDF
                         </button>
-                        <button type="button" id="new-estimate-btn" class="w-full bg-indigo-500 text-white p-3 rounded-lg font-semibold hover:bg-indigo-600 transition duration-200 col-span-2">
-                            New Estimate
-                        </button>
                     </div>
                 </div>
+                <button type="button" id="new-estimate-btn" class="mt-4 w-full bg-indigo-500 text-white p-3 rounded-lg font-semibold hover:bg-indigo-600 transition duration-200">
+                    New Estimate
+                </button>
 
-                <!-- Saved Estimates Dropdown and Buttons -->
                 <div class="bg-gray-50 p-4 rounded-lg mt-4">
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Saved Estimates</h2>
-                    <div class="flex items-center space-x-2">
+                    <div class="flex flex-wrap items-center space-x-2 space-y-2 md:space-y-0">
                         <select id="saved-estimates-dropdown" class="flex-grow p-2.5 rounded-lg border-gray-300">
                             <option value="">Select an Estimate</option>
                         </select>
-                        <button type="button" id="load-selected-btn" class="p-2.5 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-200">Load</button>
-                        <button type="button" id="delete-selected-btn" class="p-2.5 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition duration-200">Delete</button>
+                        <button type="button" id="load-selected-btn" class="w-full md:w-auto p-2.5 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-200">Load</button>
+                        <button type="button" id="delete-selected-btn" class="w-full md:w-auto p-2.5 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition duration-200">Delete</button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Customer View: For viewing and accepting the estimate -->
         <div id="customer-view" class="hidden">
             <div class="space-y-4">
-                <!-- Customer Information Display -->
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Information</h2>
-                    <div class="read-only-display space-y-2">
-                        <div>
-                            <span class="block text-sm font-medium text-gray-700">Work Title:</span>
-                            <span id="work-title-display" class="block mt-1 p-2.5 text-lg"></span>
+                <div id="pdf-content">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Information</h2>
+                        <div class="read-only-display space-y-2">
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700">Work Title:</span>
+                                <span id="work-title-display" class="block mt-1 p-2.5 text-lg"></span>
+                            </div>
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700">Customer Name:</span>
+                                <span id="customer-name-display" class="block mt-1 p-2.5 text-lg"></span>
+                            </div>
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700">Estimate Number:</span>
+                                <span id="estimate-number-display" class="block mt-1 p-2.5 text-lg"></span>
+                            </div>
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700">Date:</span>
+                                <span id="date-display" class="block mt-1 p-2.5 text-lg"></span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="block text-sm font-medium text-gray-700">Customer Name:</span>
-                            <span id="customer-name-display" class="block mt-1 p-2.5 text-lg"></span>
+                    </div>
+                
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
+                        <div id="items-container-display" class="space-y-4">
+                            </div>
+                    </div>
+                
+                    <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+                        <div class="flex justify-between font-semibold text-gray-700">
+                            <span>Subtotal</span>
+                            <span id="subtotal-display"></span>
                         </div>
-                        <div>
-                            <span class="block text-sm font-medium text-gray-700">Estimate Number:</span>
-                            <span id="estimate-number-display" class="block mt-1 p-2.5 text-lg"></span>
+                        <div class="flex justify-between font-semibold text-gray-700">
+                            <span>Discount</span>
+                            <span id="discount-display"></span>
                         </div>
-                        <div>
-                            <span class="block text-sm font-medium text-gray-700">Date:</span>
-                            <span id="date-display" class="block mt-1 p-2.5 text-lg"></span>
+                        <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
+                            <span>Grand Total</span>
+                            <span id="grand-total-display"></span>
                         </div>
+                        <div id="amount-in-words-display" class="text-sm italic text-gray-600"></div>
+                    </div>
+                
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Terms & Conditions</h2>
+                        <ol class="list-decimal list-inside text-sm text-gray-700 space-y-1">
+                            <li>Advance: 50% payment upfront upon budget finalization.</li>
+                            <li>35% during the work.</li>
+                            <li>15% within 7 days of work completion.</li>
+                            <li>Additional work will be billed separately.</li>
+                            <li>Check upon completion—no disputes entertained afterwards.</li>
+                            <li>No warranty for materials used.</li>
+                            <li>Any changes require separate payment.</li>
+                            <li>This estimate is valid for 7 days.</li>
+                        </ol>
                     </div>
                 </div>
 
-                <!-- Items List Display -->
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
-                    <div id="items-container-display" class="space-y-4">
-                        <!-- Item list will be added here via JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Summary Display -->
-                <div class="bg-gray-50 p-4 rounded-lg space-y-2">
-                    <div class="flex justify-between font-semibold text-gray-700">
-                        <span>Subtotal</span>
-                        <span id="subtotal-display"></span>
-                    </div>
-                    <div class="flex justify-between font-semibold text-gray-700">
-                        <span>Discount</span>
-                        <span id="discount-display"></span>
-                    </div>
-                    <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
-                        <span>Grand Total</span>
-                        <span id="grand-total-display"></span>
-                    </div>
-                    <div id="amount-in-words-display" class="text-sm italic text-gray-600"></div>
-                </div>
-
-                <!-- Terms and Conditions -->
-                <div class="bg-gray-50 p-4 rounded-lg mt-4">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Terms & Conditions</h2>
-                    <ol class="list-decimal list-inside text-sm text-gray-700 space-y-1">
-                        <li>Advance: 50% payment upfront upon budget finalization.</li>
-                        <li>35% during the work.</li>
-                        <li>15% within 7 days of work completion.</li>
-                        <li>Additional work will be billed separately.</li>
-                        <li>Check upon completion—no disputes entertained afterwards.</li>
-                        <li>No warranty for materials used.</li>
-                        <li>Any changes require separate payment.</li>
-                        <li>This estimate is valid for 7 days.</li>
-                    </ol>
-                </div>
-
-                <!-- Message box -->
                 <div id="message-box-customer" class="hidden text-center text-sm p-3 rounded-lg font-medium"></div>
 
-                <!-- Buttons for the customer -->
                 <div class="mt-4 grid grid-cols-2 gap-4">
                     <button type="button" id="accept-btn" class="w-full bg-purple-500 text-white p-3 rounded-lg font-bold hover:bg-purple-600 transition duration-200">
                         Accept Estimate
@@ -293,17 +244,21 @@
             const customerView = document.getElementById('customer-view');
             const messageBoxCreator = document.getElementById('message-box-creator');
             const messageBoxCustomer = document.getElementById('message-box-customer');
+            const loadingScreen = document.getElementById('loading-screen');
 
-            // --- Google Sheets Integration Setup ---
-            // URL of the Google Sheets script
+            // --- Google Scripts URL - Please replace with your new deployed URL ---
             const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzvNcf7sgWgIO5gsWw9MRYhXZIFLD1ct1Ha1ZPbhpH43UhS-XHCdt8pDecnhjJFV0uH/exec';
+
+            function showLoading() {
+                loadingScreen.classList.remove('hidden');
+            }
+
+            function hideLoading() {
+                loadingScreen.classList.add('hidden');
+            }
             
-            // Function to send data to the Google Sheet
             const postDataToGoogleSheet = async (data) => {
-                if (!googleScriptUrl) {
-                    console.error('Google script URL is not configured.');
-                    return;
-                }
+                showLoading();
                 const payload = new FormData();
                 payload.append('action', data.action);
                 payload.append('data', JSON.stringify(data.data));
@@ -312,21 +267,23 @@
                     const response = await fetch(googleScriptUrl, {
                         method: 'POST',
                         body: payload,
-                        mode: 'no-cors'
                     });
-                    console.log('Data successfully sent to Google Sheets.');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    hideLoading();
+                    return result;
                 } catch (error) {
+                    hideLoading();
                     console.error('Error sending data to Google Sheets:', error);
-                    showMessage(messageBoxCreator, 'Something went wrong while saving data to Google Sheets.', 'red');
+                    showMessage(messageBoxCreator, 'An error occurred while sending the estimate.', 'red');
+                    return { status: 'error', error: error.message };
                 }
             };
-
-            // Function to get data from the Google Sheet
+            
             const getEstimateFromSheet = async (action, estimateNumber = null) => {
-                if (!googleScriptUrl) {
-                    console.error('Google script URL is not configured.');
-                    return;
-                }
+                showLoading();
                 let url = `${googleScriptUrl}?action=${action}`;
                 if (estimateNumber) {
                     url += `&estimateNumber=${encodeURIComponent(estimateNumber)}`;
@@ -336,11 +293,40 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    return await response.json();
+                    const data = await response.json();
+                    hideLoading();
+                    return data;
                 } catch (error) {
+                    hideLoading();
                     console.error('Error getting data from Google Sheets:', error);
-                    showMessage(messageBoxCreator, 'Error getting data from Google Sheets.', 'red');
+                    // Pass the error message to the user
+                    showMessage(isCustomerView ? messageBoxCustomer : messageBoxCreator, `Error getting data from Google Sheets: ${error.message}`, 'red');
                     return null;
+                }
+            };
+            
+            const deleteEstimateFromSheet = async (estimateNumber) => {
+                showLoading();
+                const payload = new FormData();
+                payload.append('action', 'delete');
+                payload.append('estimateNumber', estimateNumber);
+                
+                try {
+                    const response = await fetch(googleScriptUrl, {
+                        method: 'POST',
+                        body: payload,
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    hideLoading();
+                    return result;
+                } catch (error) {
+                    hideLoading();
+                    console.error('Error deleting data from Google Sheets:', error);
+                    showMessage(messageBoxCreator, 'An error occurred while deleting the estimate.', 'red');
+                    return { status: 'error', error: error.message };
                 }
             };
             // --- End Google Sheets Integration Setup ---
@@ -359,7 +345,16 @@
                 }, 5000);
             };
 
-            // Function to convert numbers to English words
+            // Function to format the date to DD-MM-YYYY
+            const formatDate = (dateString) => {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            };
+
             const convertNumberToEnglishWords = (num) => {
                 const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
                 const teens = ['', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
@@ -390,37 +385,28 @@
                 return 'Rupees ' + words.trim() + ' Only';
             };
             
-            // Function to format the date to DD-MM-YYYY
-            const formatDate = (dateString) => {
-                const date = new Date(dateString);
-                const day = String(date.getDate()).padStart(2, '0');
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const year = date.getFullYear();
-                return `${day}-${month}-${year}`;
-            };
-
             // Function to generate the PDF
             const generatePDF = (data) => {
                 const customerName = data.customerName;
+                const customerWhatsapp = data.customerWhatsapp;
                 const estimateNumber = data.estimateNumber;
                 const date = data.date;
                 const workTitle = data.workTitle;
-                const items = data.items;
+                const items = JSON.parse(data.items);
                 const subtotal = data.subtotal;
                 const discount = data.discount;
                 const grandTotal = data.grandTotal;
 
-                // Calculates the due date (7 days after the estimate date)
                 const estimateDate = new Date(date);
                 estimateDate.setDate(estimateDate.getDate() + 7);
                 const dueDate = formatDate(estimateDate.toISOString().split('T')[0]);
                 
-                const grandTotalAmount = parseFloat(grandTotal.replace('₹ ', '').replace(/,/g, '')) || 0;
+                const grandTotalAmount = parseFloat(grandTotal) || 0;
                 const amountInWords = convertNumberToEnglishWords(grandTotalAmount);
-
                 const pdfContent = document.createElement('div');
                 pdfContent.className = 'pdf-container';
                 
+                // PDF HTML structure
                 pdfContent.innerHTML = `
                     <style>
                         .pdf-container {
@@ -462,10 +448,8 @@
                             word-wrap: break-word;
                             overflow-wrap: break-word;
                         }
-
                     </style>
 
-                    <!-- Header -->
                     <div class="pdf-header">
                         <h1 style="color: #ff8c00; font-size: 24px;">Vaibhav Enterprises</h1>
                         <p>Anand Nagar, Near Kalyani Nursing Home, Lohegaon, Pune - 17</p>
@@ -473,12 +457,11 @@
                         <p>Reg. No: MH-26-0106699</p>
                     </div>
                     
-                    <!-- Customer and Estimate Info -->
                     <div class="info-section">
                         <div class="info-section-left">
                             <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">To,</div>
                             <div>Name: ${customerName}</div>
-                            <div>Contact: ${data.customerWhatsapp}</div>
+                            <div>Contact: ${customerWhatsapp}</div>
                         </div>
                         <div class="info-section-right">
                             <div>Estimate No.: ${estimateNumber}</div>
@@ -487,10 +470,8 @@
                         </div>
                     </div>
                     
-                    <!-- Work Title -->
                     <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">Work Title: ${workTitle}</div>
 
-                    <!-- Items List -->
                     <h2 class="section-title">Particular / Description</h2>
                     <table class="item-table">
                         <thead>
@@ -504,28 +485,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Table rows will be populated dynamically -->
-                        </tbody>
+                            </tbody>
                     </table>
 
-                    <!-- Summary -->
                     <div class="summary-section">
                         <div class="summary-row">
                             <span class="label">Subtotal:</span>
-                            <span>${subtotal}</span>
+                            <span>₹ ${parseFloat(subtotal).toFixed(2)}</span>
                         </div>
                         <div class="summary-row">
                             <span class="label">Discount:</span>
-                            <span>₹ ${parseFloat(discount).toFixed(2)}</span>
+                            <span>₹ ${((subtotal * discount) / 100).toFixed(2)}</span>
                         </div>
                         <div class="summary-row total-row">
                             <span class="label">Total Amount:</span>
-                            <span>${grandTotal}</span>
+                            <span>₹ ${parseFloat(grandTotal).toFixed(2)}</span>
                         </div>
                         <div class="amount-in-words">${amountInWords}</div>
                     </div>
 
-                    <!-- Footer -->
                     <div class="footer">
                         <div style="margin-bottom: 8px;">All disputes are subject to Maharashtra Jurisdiction. Certified that the particulars given above are true and correct.</div>
                         <div style="font-weight: bold; margin-bottom: 20px;">Customer Signature:</div>
@@ -551,15 +529,14 @@
                     tableBody.appendChild(tableRow);
                 });
 
-                // Generate the PDF
                 html2pdf().from(pdfContent).set({
-                    margin: [10, 0, 10, 0], // Margin: top, right, bottom, left
+                    margin: [10, 0, 10, 0],
                     filename: `Estimate_${customerName}_${estimateNumber}.pdf`,
                     html2canvas: { scale: 2 },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                }).save();
-
-                pdfContent.remove(); // Remove temporary component
+                }).save().finally(() => {
+                    pdfContent.remove();
+                });
             };
 
             // If the view is for the customer
@@ -573,81 +550,108 @@
                 let estimateData = null;
 
                 if (estimateId) {
-                    try {
-                        const savedData = localStorage.getItem(estimateId);
-                        if (savedData) {
-                            estimateData = JSON.parse(savedData);
+                    getEstimateFromSheet('getsingle', estimateId)
+                        .then(data => {
+                            // Added this console.log for debugging purposes
+                            console.log("Fetched data from Google Sheet:", data);
                             
-                            document.getElementById('work-title-display').textContent = estimateData.workTitle || '';
-                            document.getElementById('customer-name-display').textContent = estimateData.customerName || '';
-                            document.getElementById('estimate-number-display').textContent = estimateData.estimateNumber || '';
-                            document.getElementById('date-display').textContent = formatDate(estimateData.date);
-                            document.getElementById('subtotal-display').textContent = estimateData.subtotal;
-                            document.getElementById('discount-display').textContent = `₹ ${parseFloat(estimateData.discount).toFixed(2)}`;
-                            document.getElementById('grand-total-display').textContent = estimateData.grandTotal;
-                            
-                            const grandTotalAmount = parseFloat(estimateData.grandTotal.replace('₹ ', '').replace(/,/g, '')) || 0;
-                            document.getElementById('amount-in-words-display').textContent = convertNumberToEnglishWords(grandTotalAmount);
-
-                            const itemsContainerDisplay = document.getElementById('items-container-display');
-                            itemsContainerDisplay.innerHTML = '';
-                            estimateData.items.forEach(item => {
-                                const itemRow = document.createElement('div');
-                                itemRow.className = 'read-only-item-row mb-2';
-                                itemRow.innerHTML = `
-                                    <div class="font-medium text-gray-800">${item.name}</div>
-                                    ${item.description ? `<div class="text-sm text-gray-600 mb-2">${item.description}</div>` : ''}
-                                    <div class="text-sm text-gray-600">Qty: ${item.quantity} ${item.unit} | Rate: ₹ ${parseFloat(item.rate).toFixed(2)} | Total: ₹ ${parseFloat(item.total).toFixed(2)}</div>
-                                `;
-                                itemsContainerDisplay.appendChild(itemRow);
-                            });
-
-                            // On "Accept Estimate" button click
-                            acceptBtn.addEventListener('click', async () => {
-                                const creatorWhatsapp = estimateData.creatorWhatsapp;
-                                const estimateNumber = estimateData.estimateNumber;
-                                
-                                if (!creatorWhatsapp) {
-                                    showMessage(messageBoxCustomer, 'Creator\'s WhatsApp number is not available.', 'red');
-                                    return;
-                                }
-
-                                // Update status in Google Sheet
-                                const dataToUpdate = {
-                                    estimateNumber: estimateNumber,
-                                    status: 'Accepted'
+                            // Check if data is received and contains the required fields
+                            if (data && data['Estimate Number']) {
+                                estimateData = {
+                                    customerName: data['Customer Name'] || '',
+                                    customerWhatsapp: data['Customer Whatsapp'] || '',
+                                    workTitle: data['Work Title'] || '',
+                                    estimateNumber: data['Estimate Number'] || '',
+                                    date: data['Date'] || '',
+                                    items: data['Items'] || '[]', // Provide a default empty array for items
+                                    subtotal: data['Subtotal'] || 0,
+                                    discount: data['Discount'] || 0,
+                                    grandTotal: data['Grand Total'] || 0,
+                                    creatorWhatsapp: data['Your WhatsApp Number'] || ''
                                 };
-                                await postDataToGoogleSheet({ action: 'updateStatus', data: dataToUpdate });
                                 
-                                let message = `Hello, Estimate number ${estimateNumber} has been accepted by the customer.`;
-                                const whatsappUrl = `https://wa.me/${creatorWhatsapp}?text=${encodeURIComponent(message)}`;
-                                window.open(whatsappUrl, '_blank');
-                            });
-                            
-                            // On "Download PDF" button click
-                            downloadPdfBtn.addEventListener('click', () => {
-                                if (estimateData) {
-                                    generatePDF(estimateData);
-                                    showMessage(messageBoxCustomer, 'PDF is being downloaded.', 'green');
-                                }
-                            });
+                                // Update the display elements with the fetched data
+                                document.getElementById('work-title-display').textContent = estimateData.workTitle;
+                                document.getElementById('customer-name-display').textContent = estimateData.customerName;
+                                document.getElementById('estimate-number-display').textContent = estimateData.estimateNumber;
+                                document.getElementById('date-display').textContent = formatDate(estimateData.date);
+                                document.getElementById('subtotal-display').textContent = `₹ ${parseFloat(estimateData.subtotal).toFixed(2)}`;
+                                document.getElementById('discount-display').textContent = `${parseFloat(estimateData.discount)}%`;
+                                document.getElementById('grand-total-display').textContent = `₹ ${parseFloat(estimateData.grandTotal).toFixed(2)}`;
+                                const grandTotalAmount = parseFloat(estimateData.grandTotal) || 0;
+                                document.getElementById('amount-in-words-display').textContent = convertNumberToEnglishWords(grandTotalAmount);
 
-                        } else {
-                            showMessage(messageBoxCustomer, 'Estimate data not found.', 'red');
-                        }
-                    } catch (error) {
-                        showMessage(messageBoxCustomer, 'Something went wrong while loading the estimate.', 'red');
-                        console.error('Error loading estimate data:', error);
-                    }
+                                const itemsContainerDisplay = document.getElementById('items-container-display');
+                                itemsContainerDisplay.innerHTML = '';
+                                try {
+                                    const items = JSON.parse(estimateData.items);
+                                    if (items && items.length > 0) {
+                                        items.forEach(item => {
+                                            const itemRow = document.createElement('div');
+                                            itemRow.className = 'read-only-item-row mb-2';
+                                            itemRow.innerHTML = `
+                                                <div class="font-medium text-gray-800">${item.name || ''}</div>
+                                                ${item.description ? `<div class="text-sm text-gray-600 mb-2">${item.description}</div>` : ''}
+                                                <div class="text-sm text-gray-600">Qty: ${item.quantity || 0} ${item.unit || ''} | Rate: ₹ ${parseFloat(item.rate || 0).toFixed(2)} | Total: ₹ ${parseFloat(item.total || 0).toFixed(2)}</div>
+                                            `;
+                                            itemsContainerDisplay.appendChild(itemRow);
+                                        });
+                                    } else {
+                                        itemsContainerDisplay.innerHTML = '<p class="text-gray-500">No items listed.</p>';
+                                    }
+                                } catch (e) {
+                                    console.error("Error parsing items JSON:", e);
+                                    itemsContainerDisplay.innerHTML = '<p class="text-red-500">Error loading item details.</p>';
+                                }
+                                
+                                acceptBtn.addEventListener('click', async () => {
+                                    if (confirm('Are you sure you want to accept this estimate?')) {
+                                        const dataToUpdate = {
+                                            estimateNumber: estimateData.estimateNumber,
+                                            status: 'Accepted'
+                                        };
+                                        const result = await postDataToGoogleSheet({ action: 'updateStatus', data: dataToUpdate });
+                                        if (result.status === 'success') {
+                                            let message = `Hello, Estimate number ${estimateData.estimateNumber} has been accepted by the customer.`;
+                                            if (estimateData.creatorWhatsapp) {
+                                                const whatsappUrl = `https://wa.me/${estimateData.creatorWhatsapp}?text=${encodeURIComponent(message)}`;
+                                                window.open(whatsappUrl, '_blank');
+                                            }
+                                            showMessage(messageBoxCustomer, 'Estimate accepted successfully!', 'green');
+                                            acceptBtn.disabled = true;
+                                            acceptBtn.textContent = 'Accepted';
+                                            acceptBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
+                                            acceptBtn.classList.add('bg-gray-400');
+                                        } else {
+                                            showMessage(messageBoxCustomer, 'Failed to accept estimate. Please try again.', 'red');
+                                        }
+                                    }
+                                });
+
+                                downloadPdfBtn.addEventListener('click', () => {
+                                    if (estimateData) {
+                                        generatePDF(estimateData);
+                                        showMessage(messageBoxCustomer, 'PDF is being downloaded.', 'green');
+                                    }
+                                });
+                            } else {
+                                showMessage(messageBoxCustomer, 'Estimate data not found.', 'red');
+                                console.error('Estimate data not found or invalid data received.');
+                            }
+                        })
+                        .catch(error => {
+                            showMessage(messageBoxCustomer, 'Something went wrong while loading the estimate.', 'red');
+                            console.error('Error in getEstimateFromSheet promise:', error);
+                        });
                 } else {
                     showMessage(messageBoxCustomer, 'Estimate ID not available.', 'red');
+                    console.error('Estimate ID not available in URL.');
                 }
 
             } else {
                 // Creator's view
                 creatorView.classList.remove('hidden');
                 customerView.classList.add('hidden');
-
                 const itemsContainer = document.getElementById('items-container');
                 const addItemBtn = document.getElementById('add-item-btn');
                 const newEstimateBtn = document.getElementById('new-estimate-btn');
@@ -668,113 +672,32 @@
                 const loadSelectedBtn = document.getElementById('load-selected-btn');
                 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
                 
-                // Function to generate a new estimate number
+                let loadedEstimates = [];
+
+                const loadEstimatesToDropdown = async () => {
+                    const estimates = await getEstimateFromSheet('getall');
+                    loadedEstimates = Array.isArray(estimates) ? estimates : [];
+                    savedEstimatesDropdown.innerHTML = '<option value="">Select an Estimate</option>';
+                    if (loadedEstimates.length > 0) {
+                        loadedEstimates.forEach(estimate => {
+                            const option = document.createElement('option');
+                            option.value = estimate['Estimate Number'];
+                            option.textContent = `${estimate['Estimate Number']} - ${estimate['Customer Name']} (${formatDate(estimate['Date'])})`;
+                            savedEstimatesDropdown.appendChild(option);
+                        });
+                    }
+                };
+
                 const generateNewEstimateNumber = async () => {
                     const today = new Date();
                     const formattedDate = today.toISOString().split('T')[0];
                     dateInput.value = formattedDate;
-
-                    const savedEstimates = await getEstimateFromSheet('getall');
-                    const newCount = savedEstimates ? savedEstimates.length + 1 : 1;
-                    
-                    const formattedCount = String(newCount).padStart(3, '0');
-                    const newEstimateNumber = `EST-${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}-${formattedCount}`;
-                    estimateNumberInput.value = newEstimateNumber;
-                    
-                    renderSavedEstimatesDropdown(savedEstimates);
+                    const estimates = await getEstimateFromSheet('getall');
+                    const newCount = Array.isArray(estimates) ? estimates.length + 1 : 1;
+                    estimateNumberInput.value = `EST-${newCount.toString().padStart(4, '0')}`;
                 };
 
-                // Function to display saved estimates in the dropdown
-                const renderSavedEstimatesDropdown = (estimates) => {
-                    savedEstimatesDropdown.innerHTML = '<option value="">Select an Estimate</option>';
-                    if (!estimates || estimates.length === 0) {
-                        return;
-                    }
-                    estimates.forEach(estimate => {
-                        const option = document.createElement('option');
-                        option.value = estimate['Estimate Number'];
-                        option.textContent = `${estimate['Estimate Number']} - ${estimate['Customer Name']}`;
-                        savedEstimatesDropdown.appendChild(option);
-                    });
-                };
-                
-                // Function to load the selected estimate
-                loadSelectedBtn.addEventListener('click', async () => {
-                    const estimateNumber = savedEstimatesDropdown.value;
-                    if (estimateNumber) {
-                        const estimateData = await getEstimateFromSheet('getsingle', estimateNumber);
-                        if (estimateData) {
-                            fillFormWithData(estimateData);
-                            showMessage(messageBoxCreator, `Estimate ${estimateNumber} loaded successfully.`, 'green');
-                        }
-                    } else {
-                        showMessage(messageBoxCreator, 'Please select an estimate to load.', 'red');
-                    }
-                });
-
-                // Function to delete the selected estimate
-                deleteSelectedBtn.addEventListener('click', async () => {
-                    const estimateNumber = savedEstimatesDropdown.value;
-                    if (estimateNumber) {
-                        if (confirm(`Are you sure you want to delete estimate number ${estimateNumber}?`)) {
-                            await postDataToGoogleSheet({ action: 'delete', data: { estimateNumber } });
-                            await generateNewEstimateNumber(); // Refresh the dropdown
-                            showMessage(messageBoxCreator, `Estimate ${estimateNumber} deleted successfully.`, 'green');
-                        }
-                    } else {
-                        showMessage(messageBoxCreator, 'Please select an estimate to delete.', 'red');
-                    }
-                });
-
-                // Function to fill the form with data
-                const fillFormWithData = (data) => {
-                    customerNameInput.value = data['Customer Name'] || '';
-                    customerWhatsappInput.value = data['Customer\'s WhatsApp Number'] || '';
-                    estimateNumberInput.value = data['Estimate Number'] || '';
-                    dateInput.value = data['Date'] ? new Date(data['Date']).toISOString().split('T')[0] : '';
-                    workTitleInput.value = data['Work Title'] || '';
-                    discountAmountInput.value = parseFloat(data['Discount'].replace(/[^0-9.]/g, '')) || 0;
-                    
-                    itemsContainer.innerHTML = '';
-                    const items = JSON.parse(data['Items']);
-                    items.forEach(item => {
-                        const newItem = createItemRow();
-                        newItem.querySelector('.item-name').value = item.name;
-                        newItem.querySelector('.item-description').value = item.description;
-                        newItem.querySelector('.item-quantity').value = item.quantity;
-                        newItem.querySelector('.item-unit').value = item.unit;
-                        newItem.querySelector('.item-rate').value = item.rate;
-                        itemsContainer.appendChild(newItem);
-                    });
-                    calculateTotals();
-                };
-
-                // Function to calculate totals
-                const calculateTotals = () => {
-                    let subtotal = 0;
-                    const itemRows = document.querySelectorAll('.item-row');
-                    
-                    itemRows.forEach(row => {
-                        const quantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
-                        const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
-                        const total = quantity * rate;
-                        row.querySelector('.item-total').value = total.toFixed(2);
-                        subtotal += total;
-                    });
-                    
-                    const discount = parseFloat(discountAmountInput.value) || 0;
-                    let grandTotal = subtotal - discount;
-                    if (grandTotal < 0) {
-                        grandTotal = 0;
-                    }
-
-                    subtotalEl.textContent = `₹ ${subtotal.toFixed(2)}`;
-                    grandTotalEl.textContent = `₹ ${grandTotal.toFixed(2)}`;
-                    amountInWordsEl.textContent = convertNumberToEnglishWords(grandTotal);
-                };
-
-                // Function to create a new item row
-                const createItemRow = () => {
+                const addItemRow = (item = {}) => {
                     const itemRow = document.createElement('div');
                     itemRow.className = 'item-row bg-white p-3 rounded-lg shadow-sm';
                     itemRow.innerHTML = `
@@ -782,11 +705,11 @@
                             <div class="w-full space-y-2">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Item Name</label>
-                                    <input type="text" class="item-name mt-1 block w-full p-2.5" placeholder="e.g., Labor Cost">
+                                    <input type="text" class="item-name mt-1 block w-full p-2.5" placeholder="e.g., Labor Cost" value="${item.name || ''}" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Description</label>
-                                    <textarea class="item-description mt-1 block w-full p-2.5" rows="2" placeholder="e.g., Installation of 100 ft wiring and setup."></textarea>
+                                    <label class="block text-sm font-medium text-gray-700">Description (Optional)</label>
+                                    <textarea class="item-description mt-1 block w-full p-2.5" rows="2" placeholder="e.g., Installation of 100 ft wiring and setup.">${item.description || ''}</textarea>
                                 </div>
                             </div>
                             <button type="button" class="delete-item-btn ml-2 mt-1 p-2 text-red-500 hover:text-red-700 transition duration-200" title="Delete Item">
@@ -798,217 +721,248 @@
                         <div class="grid grid-cols-4 gap-2">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                                <input type="number" class="item-quantity mt-1 block w-full p-2.5" placeholder="e.g., 1" min="1">
+                                <input type="number" class="item-quantity mt-1 block w-full p-2.5" placeholder="e.g., 1" min="1" value="${item.quantity || 1}" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Unit</label>
-                                <input type="text" class="item-unit mt-1 block w-full p-2.5" placeholder="e.g., Pcs">
+                                <input type="text" class="item-unit mt-1 block w-full p-2.5" placeholder="e.g., Pcs" value="${item.unit || 'nos'}" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Rate</label>
-                                <input type="number" class="item-rate mt-1 block w-full p-2.5" placeholder="e.g., 100" min="0">
+                                <input type="number" class="item-rate mt-1 block w-full p-2.5" placeholder="e.g., 100" min="0" value="${item.rate || 0}" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Total</label>
-                                <input type="text" class="item-total mt-1 block w-full p-2.5 bg-gray-100" readonly>
+                                <input type="text" class="item-total mt-1 block w-full p-2.5 bg-gray-100" readonly value="${item.total || '0.00'}">
                             </div>
                         </div>
                     `;
-                    return itemRow;
-                };
-
-                // Add a new item row on button click
-                addItemBtn.addEventListener('click', () => {
-                    const newItem = createItemRow();
-                    itemsContainer.appendChild(newItem);
-                    calculateTotals();
-                });
-
-                // Start a new estimate
-                newEstimateBtn.addEventListener('click', async () => {
-                    customerNameInput.value = '';
-                    customerWhatsappInput.value = '';
-                    discountAmountInput.value = '';
-                    workTitleInput.value = '';
-                    itemsContainer.innerHTML = '';
-                    itemsContainer.appendChild(createItemRow());
-                    await generateNewEstimateNumber();
-                    calculateTotals();
-                    showMessage(messageBoxCreator, 'New estimate is ready!', 'green');
-                });
-
-                // Delete an item row on button click
-                itemsContainer.addEventListener('click', (e) => {
-                    if (e.target.closest('.delete-item-btn')) {
-                        const itemRow = e.target.closest('.item-row');
+                    itemsContainer.appendChild(itemRow);
+                    itemRow.querySelector('.delete-item-btn').addEventListener('click', () => {
                         itemRow.remove();
                         calculateTotals();
-                    }
-                });
+                    });
+                    itemRow.querySelectorAll('input, textarea').forEach(input => {
+                        input.addEventListener('input', calculateTotals);
+                    });
+                };
+                
+                const calculateTotals = () => {
+                    let subtotal = 0;
+                    const itemRows = document.querySelectorAll('.item-row');
+                    itemRows.forEach(row => {
+                        const quantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
+                        const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
+                        const total = quantity * rate;
+                        subtotal += total;
+                        row.querySelector('.item-total').value = total.toFixed(2);
+                    });
 
-                // Recalculate totals on input change
+                    const discountPercentage = parseFloat(discountAmountInput.value) || 0;
+                    const discountAmount = (subtotal * discountPercentage) / 100;
+                    const grandTotal = subtotal - discountAmount;
+
+                    subtotalEl.textContent = `₹ ${subtotal.toFixed(2)}`;
+                    grandTotalEl.textContent = `₹ ${grandTotal.toFixed(2)}`;
+                    amountInWordsEl.textContent = convertNumberToEnglishWords(grandTotal);
+                };
+
+                const populateForm = (data) => {
+                    customerNameInput.value = data['Customer Name'] || '';
+                    customerWhatsappInput.value = data['Customer Whatsapp'] || '';
+                    workTitleInput.value = data['Work Title'] || '';
+                    estimateNumberInput.value = data['Estimate Number'] || '';
+                    
+                    // Convert and set the date value correctly
+                    if (data['Date']) {
+                        const date = new Date(data['Date']);
+                        const formattedDate = date.toISOString().split('T')[0];
+                        dateInput.value = formattedDate;
+                    } else {
+                        dateInput.value = '';
+                    }
+                    
+                    creatorWhatsappInput.value = data['Your WhatsApp Number'] || '';
+                    discountAmountInput.value = parseFloat(data['Discount']) || 0;
+
+                    itemsContainer.innerHTML = '';
+                    if (data.Items) {
+                        try {
+                            const items = JSON.parse(data.Items);
+                            items.forEach(item => addItemRow(item));
+                        } catch (e) {
+                            console.error("Error parsing items JSON:", e);
+                            showMessage(messageBoxCreator, 'Error loading item details from saved estimate.', 'red');
+                        }
+                    } else {
+                        addItemRow();
+                    }
+                    calculateTotals();
+                };
+
+                const resetForm = () => {
+                    document.getElementById('estimate-form').reset();
+                    itemsContainer.innerHTML = '';
+                    addItemRow();
+                    calculateTotals();
+                    generateNewEstimateNumber();
+                    dateInput.valueAsDate = new Date();
+                    loadEstimatesToDropdown();
+                };
+
+                addItemBtn.addEventListener('click', () => addItemRow());
+                discountAmountInput.addEventListener('input', calculateTotals);
                 itemsContainer.addEventListener('input', (e) => {
-                    if (e.target.classList.contains('item-quantity') || e.target.classList.contains('item-rate')) {
+                    if (e.target.closest('.item-row')) {
                         calculateTotals();
                     }
                 });
-                
-                // Recalculate totals on discount change
-                discountAmountInput.addEventListener('input', calculateTotals);
-
-                // Open contacts
-                openContactsBtn.addEventListener('click', async () => {
-                    try {
-                        if (!('contacts' in navigator && 'select' in navigator.contacts)) {
-                            showMessage(messageBoxCreator, 'Contacts API is not supported in this browser.', 'red');
-                            return;
-                        }
-                        const properties = ['name', 'tel'];
-                        const options = { multiple: false };
-                        const contacts = await navigator.contacts.select(properties, options);
-                        if (contacts.length > 0) {
-                            const contact = contacts[0];
-                            const name = contact.name && contact.name.length > 0 ? contact.name[0] : '';
-                            const tel = contact.tel && contact.tel.length > 0 ? contact.tel[0] : '';
-                            customerNameInput.value = name;
-                            const cleanedTel = tel.replace(/\D/g, '');
-                            customerWhatsappInput.value = cleanedTel;
-                        }
-                    } catch (error) {
-                        showMessage(messageBoxCreator, 'Error getting contacts or permission denied.', 'red');
-                        console.error('Contacts API Error:', error);
-                    }
-                });
-
-                // Save creator's WhatsApp number in local storage
-                const savedWhatsapp = localStorage.getItem('creatorWhatsapp');
-                if (savedWhatsapp) {
-                    creatorWhatsappInput.value = savedWhatsapp;
-                } else {
-                    creatorWhatsappInput.value = '9049764945';
-                }
-
-                creatorWhatsappInput.addEventListener('input', () => {
-                    localStorage.setItem('creatorWhatsapp', creatorWhatsappInput.value);
-                });
-
-                // Share on WhatsApp
                 shareWhatsappBtn.addEventListener('click', async () => {
-                    const customerWhatsapp = customerWhatsappInput.value;
                     const customerName = customerNameInput.value;
+                    const customerWhatsapp = customerWhatsappInput.value;
+                    const workTitle = workTitleInput.value;
                     const estimateNumber = estimateNumberInput.value;
                     const date = dateInput.value;
                     const creatorWhatsapp = creatorWhatsappInput.value;
-                    const workTitle = workTitleInput.value;
-                    
-                    if (!customerWhatsapp || !customerName || !estimateNumber || !date || !creatorWhatsapp) {
-                        showMessage(messageBoxCreator, 'Please fill in all required information.', 'red');
-                        return;
-                    }
+                    const subtotal = parseFloat(subtotalEl.textContent.replace('₹ ', ''));
+                    const discount = parseFloat(discountAmountInput.value) || 0;
+                    const grandTotal = parseFloat(grandTotalEl.textContent.replace('₹ ', ''));
 
                     const items = [];
                     document.querySelectorAll('.item-row').forEach(row => {
-                        const itemName = row.querySelector('.item-name').value;
-                        const itemDescription = row.querySelector('.item-description').value;
-                        const itemQuantity = row.querySelector('.item-quantity').value;
-                        const itemUnit = row.querySelector('.item-unit').value;
-                        const itemRate = row.querySelector('.item-rate').value;
-                        const itemTotal = row.querySelector('.item-total').value;
-                        items.push({ name: itemName, description: itemDescription, quantity: itemQuantity, unit: itemUnit, rate: itemRate, total: itemTotal });
+                        items.push({
+                            name: row.querySelector('.item-name').value,
+                            description: row.querySelector('.item-description').value,
+                            quantity: parseFloat(row.querySelector('.item-quantity').value),
+                            unit: row.querySelector('.item-unit').value,
+                            rate: parseFloat(row.querySelector('.item-rate').value),
+                            total: parseFloat(row.querySelector('.item-total').value)
+                        });
                     });
-                    
-                    const subtotal = subtotalEl.textContent;
-                    const discount = discountAmountInput.value || 0;
-                    const grandTotal = grandTotalEl.textContent;
 
-                    const estimateData = {
-                        customerName,
-                        customerWhatsapp,
-                        estimateNumber,
-                        date,
-                        items,
-                        subtotal,
-                        discount,
-                        grandTotal,
-                        creatorWhatsapp,
-                        workTitle
+                    if (!customerName || !customerWhatsapp || !workTitle || !estimateNumber || !date) {
+                        showMessage(messageBoxCreator, 'Please fill out all required fields.', 'red');
+                        return;
+                    }
+
+                    const formData = {
+                        'Customer Name': customerName,
+                        'Customer Whatsapp': customerWhatsapp,
+                        'Work Title': workTitle,
+                        'Estimate Number': estimateNumber,
+                        'Date': date,
+                        'Your WhatsApp Number': creatorWhatsapp,
+                        'Items': JSON.stringify(items),
+                        'Subtotal': subtotal,
+                        'Discount': discount,
+                        'Grand Total': grandTotal,
+                        'Status': 'Pending'
                     };
-                    
-                    // Save data to Google Sheet
-                    await postDataToGoogleSheet({
-                        action: 'save',
-                        data: {
-                            'Customer Name': customerName,
-                            'Customer\'s WhatsApp Number': customerWhatsapp,
-                            'Estimate Number': estimateNumber,
-                            'Date': date,
-                            'Work Title': workTitle,
-                            'Items': JSON.stringify(items),
-                            'Subtotal': subtotal,
-                            'Discount': `₹ ${parseFloat(discount).toFixed(2)}`,
-                            'Grand Total': grandTotal,
-                            'Status': 'Sent'
-                        }
-                    });
-                    
-                    const estimateId = estimateNumber;
-                    localStorage.setItem(estimateId, JSON.stringify(estimateData));
-                    const shareUrl = `${window.location.origin}${window.location.pathname}?view=customer&id=${encodeURIComponent(estimateId)}`;
-                    
-                    let message = `Hello ${customerName},\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: 👉 ${shareUrl}\n\nThank you for connecting with Vaibhav Enterprises.\nVisit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
-                    
-                    const whatsappUrl = `https://wa.me/${customerWhatsapp}?text=${encodeURIComponent(message)}`;
-                    window.open(whatsappUrl, '_blank');
-                    showMessage(messageBoxCreator, 'Estimate shared on WhatsApp!', 'green');
-                    await generateNewEstimateNumber();
+
+                    const result = await postDataToGoogleSheet({ action: 'save', data: formData });
+
+                    if (result.status === 'success') {
+                        const whatsappMessage = `Hello ${customerName},\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: https://vai27717.github.io/mobile-estimate-app/?view=customer&id=${estimateNumber}\n\nThank you for connecting with Vaibhav Enterprises.\nVisit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
+                        const whatsappUrl = `https://wa.me/${customerWhatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
+                        window.open(whatsappUrl, '_blank');
+                        showMessage(messageBoxCreator, 'Estimate saved and sent successfully! Please check WhatsApp.', 'green');
+                        resetForm();
+                    } else {
+                        showMessage(messageBoxCreator, `Error: ${result.error}`, 'red');
+                    }
                 });
 
-                // PDF generation logic
                 generatePdfBtn.addEventListener('click', () => {
                     const customerName = customerNameInput.value;
+                    const workTitle = workTitleInput.value;
                     const estimateNumber = estimateNumberInput.value;
                     const date = dateInput.value;
-                    const workTitle = workTitleInput.value;
-                    
-                    if (!customerName) {
-                        showMessage(messageBoxCreator, 'Please enter a customer name to generate the PDF.', 'red');
-                        return;
-                    }
-                    
+                    const customerWhatsapp = customerWhatsappInput.value;
+                    const subtotal = parseFloat(subtotalEl.textContent.replace('₹ ', ''));
+                    const discount = parseFloat(discountAmountInput.value) || 0;
+                    const grandTotal = parseFloat(grandTotalEl.textContent.replace('₹ ', ''));
                     const items = [];
                     document.querySelectorAll('.item-row').forEach(row => {
-                        const itemName = row.querySelector('.item-name').value;
-                        const itemDescription = row.querySelector('.item-description').value;
-                        const itemQuantity = row.querySelector('.item-quantity').value;
-                        const itemUnit = row.querySelector('.item-unit').value;
-                        const itemRate = row.querySelector('.item-rate').value;
-                        const itemTotal = row.querySelector('.item-total').value;
-                        items.push({ name: itemName, description: itemDescription, quantity: itemQuantity, unit: itemUnit, rate: itemRate, total: itemTotal });
+                        items.push({
+                            name: row.querySelector('.item-name').value,
+                            description: row.querySelector('.item-description').value,
+                            quantity: parseFloat(row.querySelector('.item-quantity').value),
+                            unit: row.querySelector('.item-unit').value,
+                            rate: parseFloat(row.querySelector('.item-rate').value),
+                            total: parseFloat(row.querySelector('.item-total').value)
+                        });
                     });
-                    
-                    const subtotal = subtotalEl.textContent;
-                    const discount = discountAmountInput.value || 0;
-                    const grandTotal = grandTotalEl.textContent;
-                    const customerWhatsapp = customerWhatsappInput.value;
 
-                    const estimateData = {
+                    if (!customerName || !workTitle || !estimateNumber || !date) {
+                        showMessage(messageBoxCreator, 'Please fill out all required fields to generate PDF.', 'red');
+                        return;
+                    }
+
+                    const formData = {
                         customerName,
                         customerWhatsapp,
+                        workTitle,
                         estimateNumber,
                         date,
-                        items,
+                        items: JSON.stringify(items),
                         subtotal,
                         discount,
                         grandTotal,
-                        workTitle
+                        status: 'Pending'
                     };
-                    
-                    generatePDF(estimateData);
-                    showMessage(messageBoxCreator, 'PDF generated successfully!', 'green');
+                    generatePDF(formData);
+                });
+                
+                newEstimateBtn.addEventListener('click', resetForm);
+
+                loadSelectedBtn.addEventListener('click', async () => {
+                    const estimateNumber = savedEstimatesDropdown.value;
+                    if (estimateNumber) {
+                        const selectedEstimate = loadedEstimates.find(e => e['Estimate Number'] === estimateNumber);
+                        if (selectedEstimate) {
+                            // The Google script returns a flat object, so we need to structure it.
+                            const formattedData = {
+                                'Customer Name': selectedEstimate['Customer Name'],
+                                'Customer Whatsapp': selectedEstimate['Customer Whatsapp'],
+                                'Work Title': selectedEstimate['Work Title'],
+                                'Estimate Number': selectedEstimate['Estimate Number'],
+                                'Date': selectedEstimate['Date'],
+                                'Your WhatsApp Number': selectedEstimate['Your WhatsApp Number'],
+                                'Items': selectedEstimate['Items'],
+                                'Subtotal': selectedEstimate['Subtotal'],
+                                'Discount': selectedEstimate['Discount'],
+                                'Grand Total': selectedEstimate['Grand Total'],
+                                'Status': selectedEstimate['Status']
+                            };
+                            populateForm(formattedData);
+                            showMessage(messageBoxCreator, `Estimate ${estimateNumber} loaded successfully.`, 'green');
+                        }
+                    } else {
+                        showMessage(messageBoxCreator, 'Please select an estimate to load.', 'red');
+                    }
+                });
+                
+                deleteSelectedBtn.addEventListener('click', async () => {
+                    const estimateNumber = savedEstimatesDropdown.value;
+                    if (estimateNumber) {
+                        if (confirm(`Are you sure you want to delete estimate ${estimateNumber}? This action cannot be undone.`)) {
+                            const result = await deleteEstimateFromSheet(estimateNumber);
+                            if (result.status === 'success') {
+                                showMessage(messageBoxCreator, `Estimate ${estimateNumber} deleted successfully.`, 'green');
+                                resetForm();
+                                loadEstimatesToDropdown();
+                            } else {
+                                showMessage(messageBoxCreator, `Failed to delete estimate: ${result.error}`, 'red');
+                            }
+                        }
+                    } else {
+                        showMessage(messageBoxCreator, 'Please select an estimate to delete.', 'red');
+                    }
                 });
 
-                calculateTotals();
-                generateNewEstimateNumber();
+                // Initial setup
+                resetForm();
+                loadEstimatesToDropdown();
             }
         });
     </script>
