@@ -281,7 +281,7 @@
                     return { status: 'error', error: error.message };
                 }
             };
-            
+
             const getEstimateFromSheet = async (action, estimateNumber = null) => {
                 showLoading();
                 let url = `${googleScriptUrl}?action=${action}`;
@@ -304,7 +304,7 @@
                     return null;
                 }
             };
-            
+
             const deleteEstimateFromSheet = async (estimateNumber) => {
                 showLoading();
                 const payload = new FormData();
@@ -329,6 +329,7 @@
                     return { status: 'error', error: error.message };
                 }
             };
+
             // --- End Google Sheets Integration Setup ---
 
             // Function to display messages
@@ -511,7 +512,6 @@
                         <div class="signature">(Authorized Signature)</div>
                     </div>
                 `;
-                
                 const tableBody = pdfContent.querySelector('tbody');
                 items.forEach((item, index) => {
                     const tableRow = document.createElement('tr');
@@ -528,7 +528,6 @@
                     `;
                     tableBody.appendChild(tableRow);
                 });
-
                 html2pdf().from(pdfContent).set({
                     margin: [10, 0, 10, 0],
                     filename: `Estimate_${customerName}_${estimateNumber}.pdf`,
@@ -548,7 +547,6 @@
                 const downloadPdfBtn = document.getElementById('download-pdf-btn');
                 const estimateId = urlParams.get('id');
                 let estimateData = null;
-
                 if (estimateId) {
                     getEstimateFromSheet('getsingle', estimateId)
                         .then(data => {
@@ -566,7 +564,6 @@
                                     grandTotal: data['Grand Total'] || 0,
                                     creatorWhatsapp: data['Your WhatsApp Number'] || ''
                                 };
-                                
                                 // Update the display elements with the fetched data
                                 document.getElementById('work-title-display').textContent = estimateData.workTitle;
                                 document.getElementById('customer-name-display').textContent = estimateData.customerName;
@@ -624,7 +621,6 @@
                                         }
                                     }
                                 });
-
                                 downloadPdfBtn.addEventListener('click', () => {
                                     if (estimateData) {
                                         generatePDF(estimateData);
@@ -665,7 +661,6 @@
                 const savedEstimatesDropdown = document.getElementById('saved-estimates-dropdown');
                 const loadSelectedBtn = document.getElementById('load-selected-btn');
                 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
-                
                 let loadedEstimates = [];
 
                 const loadEstimatesToDropdown = async () => {
@@ -766,7 +761,6 @@
                     customerWhatsappInput.value = data['Customer Whatsapp'] || '';
                     workTitleInput.value = data['Work Title'] || '';
                     estimateNumberInput.value = data['Estimate Number'] || '';
-                    
                     // Convert and set the date value correctly
                     if (data['Date']) {
                         const date = new Date(data['Date']);
@@ -811,6 +805,31 @@
                         calculateTotals();
                     }
                 });
+
+                // **New code to handle contact picker**
+                openContactsBtn.addEventListener('click', async () => {
+                    try {
+                        const available = ('contacts' in navigator && 'ContactsManager' in window);
+                        if (available) {
+                            const properties = ['name', 'tel'];
+                            const options = { multiple: false };
+                            const contacts = await navigator.contacts.select(properties, options);
+
+                            if (contacts.length > 0) {
+                                const contact = contacts[0];
+                                customerNameInput.value = contact.name[0] || '';
+                                customerWhatsappInput.value = contact.tel[0] || '';
+                            }
+                        } else {
+                            showMessage(messageBoxCreator, 'Contact Picker API not supported in this browser.', 'red');
+                        }
+                    } catch (error) {
+                        console.error('Error selecting contacts:', error);
+                        showMessage(messageBoxCreator, 'Failed to access contacts. Please grant permissions.', 'red');
+                    }
+                });
+                // **End of new code**
+
                 shareWhatsappBtn.addEventListener('click', async () => {
                     const customerName = customerNameInput.value;
                     const customerWhatsapp = customerWhatsappInput.value;
@@ -852,9 +871,7 @@
                         'Grand Total': grandTotal,
                         'Status': 'Pending'
                     };
-
                     const result = await postDataToGoogleSheet({ action: 'save', data: formData });
-
                     if (result.status === 'success') {
                         const whatsappMessage = `Hello ${customerName},\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: https://vai27717.github.io/mobile-estimate-app/?view=customer&id=${estimateNumber}\n\nThank you for connecting with Vaibhav Enterprises.\nVisit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
                         const whatsappUrl = `https://wa.me/${customerWhatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -935,7 +952,7 @@
                         showMessage(messageBoxCreator, 'Please select an estimate to load.', 'red');
                     }
                 });
-                
+
                 deleteSelectedBtn.addEventListener('click', async () => {
                     const estimateNumber = savedEstimatesDropdown.value;
                     if (estimateNumber) {
@@ -962,4 +979,3 @@
     </script>
 </body>
 </html>
-
