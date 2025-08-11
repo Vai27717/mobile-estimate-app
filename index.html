@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estimate</title>
+    <title>Estimate App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
@@ -51,118 +51,142 @@
     <div class="container-fluid bg-white p-6 rounded-xl shadow-lg w-full md:max-w-lg">
         <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Estimate</h1>
         
+        <!-- Loading screen for API calls -->
         <div id="loading-screen" class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center hidden z-50">
             <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
         </div>
         
+        <!-- Creator's View (Main Form) -->
         <div id="creator-view">
             <form id="estimate-form" class="space-y-4">
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Information</h2>
-                    <div class="space-y-2">
-                        <div>
-                            <label for="customer-name" class="block text-sm font-medium text-gray-700">Customer Name</label>
-                            <div class="relative mt-1">
-                                <input type="text" id="customer-name" name="customer-name" class="block w-full p-2.5 pr-12" placeholder="e.g., Rahul Sharma" required>
-                                <button type="button" id="open-contacts-btn" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 hover:text-gray-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M22 6.5A1.5 1.5 0 0020.5 5h-17A1.5 1.5 0 002 6.5v11A1.5 1.5 0 003.5 19h17a1.5 1.5 0 001.5-1.5v-11zM10 8.5A2.5 2.5 0 115 8.5a2.5 2.5 0 015 0zM17.5 15.5a4.5 4.5 0 00-9 0H7a5.5 5.5 0 0111 0h-1.5z"></path>
-                                        <path fill-rule="evenodd" d="M14.5 8.5A2.5 2.5 0 1119.5 8.5a2.5 2.5 0 01-5 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </button>
+
+                <!-- Part 1: Customer Info & Work Title -->
+                <div id="part-1" class="page-part space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Details</h2>
+                        <div class="space-y-2">
+                            <div>
+                                <label for="customer-name" class="block text-sm font-medium text-gray-700">Customer Name</label>
+                                <div class="relative mt-1">
+                                    <input type="text" id="customer-name" name="customer-name" class="block w-full p-2.5 pr-12" placeholder="e.g., Rahul Sharma" required>
+                                    <button type="button" id="open-contacts-btn" class="absolute inset-y-0 right-0 flex items-center px-4 text-gray-500 hover:text-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M22 6.5A1.5 1.5 0 0020.5 5h-17A1.5 1.5 0 002 6.5v11A1.5 1.5 0 003.5 19h17a1.5 1.5 0 001.5-1.5v-11zM10 8.5A2.5 2.5 0 115 8.5a2.5 2.5 0 015 0zM17.5 15.5a4.5 4.5 0 00-9 0H7a5.5 5.5 0 0111 0h-1.5z"></path>
+                                            <path fill-rule="evenodd" d="M14.5 8.5A2.5 2.5 0 1119.5 8.5a2.5 2.5 0 01-5 0z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="customer-whatsapp" class="block text-sm font-medium text-gray-700">Customer WhatsApp No.</label>
+                                <input type="tel" id="customer-whatsapp" name="customer-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210" required>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="estimate-number" class="block text-sm font-medium text-gray-700">Estimate Number</label>
+                                    <input type="text" id="estimate-number" name="estimate-number" class="mt-1 block w-full p-2.5" placeholder="e.g., EST-001" readonly required>
+                                </div>
+                                <div>
+                                    <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+                                    <input type="date" id="date" name="date" class="mt-1 block w-full p-2.5" required>
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Work Title</h2>
                         <div>
-                            <label for="customer-whatsapp" class="block text-sm font-medium text-gray-700">Customer's WhatsApp Number</label>
-                            <input type="tel" id="customer-whatsapp" name="customer-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210" required>
+                            <label for="work-title" class="block text-sm font-medium text-gray-700">Work Title</label>
+                            <input type="text" id="work-title" name="work-title" class="mt-1 block w-full p-2.5" placeholder="e.g., Electrical Wiring" required>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Part 2: Item List -->
+                <div id="part-2" class="page-part hidden space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
+                        <div id="items-container" class="space-y-4">
+                            <!-- Items will be dynamically added here -->
+                        </div>
+                        <button type="button" id="add-item-btn" class="mt-4 w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-200">
+                            Add Item
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Part 3: Totals & Actions -->
+                <div id="part-3" class="page-part hidden space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+                        <div class="flex justify-between font-semibold text-gray-700">
+                            <span>Subtotal</span>
+                            <span id="subtotal">₹ 0.00</span>
+                        </div>
+                        <div class="flex justify-between font-semibold text-gray-700">
+                            <label for="discount-amount">Discount (%)</label>
+                            <input type="number" id="discount-amount" name="discount-amount" class="w-24 p-1 text-right" placeholder="0" min="0" value="0">
+                        </div>
+                        <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
+                            <span>Grand Total</span>
+                            <span id="grand-total">₹ 0.00</span>
+                        </div>
+                        <div id="amount-in-words" class="text-sm italic text-gray-600"></div>
+                    </div>
+
+                    <!-- Message box for creator view -->
+                    <div id="message-box-creator" class="hidden text-center text-sm p-3 rounded-lg font-medium"></div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4 space-y-3">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Share Estimate</h2>
+                        
+                        <div>
+                            <label for="creator-whatsapp" class="block text-sm font-medium text-gray-700">Your WhatsApp No. (for notifications)</label>
+                            <input type="tel" id="creator-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210" value="9049764945">
+                        </div>
+
                         <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="estimate-number" class="block text-sm font-medium text-gray-700">Estimate Number</label>
-                                <input type="text" id="estimate-number" name="estimate-number" class="mt-1 block w-full p-2.5" placeholder="e.g., EST-001" readonly required>
-                            </div>
-                            <div>
-                                <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                                <input type="date" id="date" name="date" class="mt-1 block w-full p-2.5" required>
-                            </div>
+                            <button type="button" id="share-whatsapp-btn" class="w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition duration-200">
+                                Share on WhatsApp
+                            </button>
+                            <button type="button" id="generate-pdf-btn" class="w-full bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 transition duration-200">
+                                Generate PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Saved Estimates</h2>
+                        <div class="flex flex-wrap items-center space-x-2 space-y-2 md:space-y-0">
+                            <select id="saved-estimates-dropdown" class="flex-grow p-2.5 rounded-lg border-gray-300">
+                                <option value="">Select an Estimate</option>
+                            </select>
+                            <button type="button" id="load-selected-btn" class="w-full md:w-auto p-2.5 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-200">Load</button>
+                            <button type="button" id="delete-selected-btn" class="w-full md:w-auto p-2.5 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition duration-200">Delete</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Work Title</h2>
-                    <div>
-                        <label for="work-title" class="block text-sm font-medium text-gray-700">Work Title</label>
-                        <input type="text" id="work-title" name="work-title" class="mt-1 block w-full p-2.5" placeholder="e.g., Electrical Wiring" required>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
-                    <div id="items-container" class="space-y-4">
-                        </div>
-                    <button type="button" id="add-item-btn" class="mt-4 w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-200">
-                        Add Item
+                <!-- Page Navigation Buttons -->
+                <div class="flex justify-between items-center mt-6">
+                    <button type="button" id="prev-page-btn" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition duration-200 hidden">
+                        ◀️ Previous
+                    </button>
+                    <span id="page-indicator" class="text-sm text-gray-500 font-semibold">Page 1 of 3</span>
+                    <button type="button" id="next-page-btn" class="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-200">
+                        Next ▶️
                     </button>
                 </div>
-
-                <div class="bg-gray-50 p-4 rounded-lg space-y-2">
-                    <div class="flex justify-between font-semibold text-gray-700">
-                        <span>Subtotal</span>
-                        <span id="subtotal">₹ 0.00</span>
-                    </div>
-                    <div class="flex justify-between font-semibold text-gray-700">
-                        <label for="discount-amount">Discount (%)</label>
-                        <input type="number" id="discount-amount" name="discount-amount" class="w-24 p-1 text-right" placeholder="0" min="0" value="0">
-                    </div>
-                    <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
-                        <span>Grand Total</span>
-                        <span id="grand-total">₹ 0.00</span>
-                    </div>
-                    <div id="amount-in-words" class="text-sm italic text-gray-600"></div>
-                </div>
-
-                <div id="message-box-creator" class="hidden text-center text-sm p-3 rounded-lg font-medium"></div>
-
-                <div class="bg-gray-50 p-4 rounded-lg mt-4 space-y-3">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Share Estimate</h2>
-                    
-                    <div>
-                        <label for="creator-whatsapp" class="block text-sm font-medium text-gray-700">Your WhatsApp Number (for notifications)</label>
-                        <input type="tel" id="creator-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <button type="button" id="share-whatsapp-btn" class="w-full bg-green-500 text-white p-3 rounded-lg font-semibold hover:bg-green-600 transition duration-200">
-                            Share on WhatsApp
-                        </button>
-                        <button type="button" id="generate-pdf-btn" class="w-full bg-red-500 text-white p-3 rounded-lg font-semibold hover:bg-red-600 transition duration-200">
-                            Generate PDF
-                        </button>
-                    </div>
-                </div>
-                <button type="button" id="new-estimate-btn" class="mt-4 w-full bg-indigo-500 text-white p-3 rounded-lg font-semibold hover:bg-indigo-600 transition duration-200">
-                    New Estimate
-                </button>
-
-                <div class="bg-gray-50 p-4 rounded-lg mt-4">
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Saved Estimates</h2>
-                    <div class="flex flex-wrap items-center space-x-2 space-y-2 md:space-y-0">
-                        <select id="saved-estimates-dropdown" class="flex-grow p-2.5 rounded-lg border-gray-300">
-                            <option value="">Select an Estimate</option>
-                        </select>
-                        <button type="button" id="load-selected-btn" class="w-full md:w-auto p-2.5 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition duration-200">Load</button>
-                        <button type="button" id="delete-selected-btn" class="w-full md:w-auto p-2.5 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition duration-200">Delete</button>
-                    </div>
-                </div>
+                
             </form>
         </div>
 
+        <!-- Customer's Read-only View -->
         <div id="customer-view" class="hidden">
             <div class="space-y-4">
                 <div id="pdf-content">
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Information</h2>
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Customer Details</h2>
                         <div class="read-only-display space-y-2">
                             <div>
                                 <span class="block text-sm font-medium text-gray-700">Work Title:</span>
@@ -186,7 +210,8 @@
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
                         <div id="items-container-display" class="space-y-4">
-                            </div>
+                            <!-- Display items here -->
+                        </div>
                     </div>
                 
                     <div class="bg-gray-50 p-4 rounded-lg space-y-2">
@@ -206,20 +231,21 @@
                     </div>
                 
                     <div class="bg-gray-50 p-4 rounded-lg mt-4">
-                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Terms & Conditions</h2>
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Terms and Conditions</h2>
                         <ol class="list-decimal list-inside text-sm text-gray-700 space-y-1">
-                            <li>Advance: 50% payment upfront upon budget finalization.</li>
-                            <li>35% during the work.</li>
-                            <li>15% within 7 days of work completion.</li>
+                            <li>Advance: 50% payment upon finalization of budget.</li>
+                            <li>During work: 35%.</li>
+                            <li>Balance: 15% within 7 days of work completion.</li>
                             <li>Additional work will be billed separately.</li>
-                            <li>Check upon completion—no disputes entertained afterwards.</li>
-                            <li>No warranty for materials used.</li>
+                            <li>Check upon completion—no disputes will be accepted afterwards.</li>
+                            <li>No guarantee on materials used.</li>
                             <li>Any changes require separate payment.</li>
                             <li>This estimate is valid for 7 days.</li>
                         </ol>
                     </div>
                 </div>
-
+                
+                <!-- Message box for customer view -->
                 <div id="message-box-customer" class="hidden text-center text-sm p-3 rounded-lg font-medium"></div>
 
                 <div class="mt-4 grid grid-cols-2 gap-4">
@@ -236,7 +262,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Checks URL parameters to determine if it's the customer view
             const urlParams = new URLSearchParams(window.location.search);
             const isCustomerView = urlParams.get('view') === 'customer';
 
@@ -245,7 +270,25 @@
             const messageBoxCreator = document.getElementById('message-box-creator');
             const messageBoxCustomer = document.getElementById('message-box-customer');
             const loadingScreen = document.getElementById('loading-screen');
+            const pages = document.querySelectorAll('.page-part');
+            const prevPageBtn = document.getElementById('prev-page-btn');
+            const nextPageBtn = document.getElementById('next-page-btn');
+            const pageIndicator = document.getElementById('page-indicator');
+            let currentPage = 0; // 0-indexed page number
 
+            const showPage = (pageIndex) => {
+                pages.forEach((page, index) => {
+                    page.classList.add('hidden');
+                    if (index === pageIndex) {
+                        page.classList.remove('hidden');
+                    }
+                });
+                currentPage = pageIndex;
+                prevPageBtn.classList.toggle('hidden', currentPage === 0);
+                nextPageBtn.classList.toggle('hidden', currentPage === pages.length - 1);
+                pageIndicator.textContent = `Page ${currentPage + 1} of ${pages.length}`;
+            };
+            
             // --- Google Scripts URL - Please replace with your new deployed URL ---
             const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzvNcf7sgWgIO5gsWw9MRYhXZIFLD1ct1Ha1ZPbhpH43UhS-XHCdt8pDecnhjJFV0uH/exec';
 
@@ -299,7 +342,6 @@
                 } catch (error) {
                     hideLoading();
                     console.error('Error getting data from Google Sheets:', error);
-                    // Pass the error message to the user
                     showMessage(isCustomerView ? messageBoxCustomer : messageBoxCreator, `Error getting data from Google Sheets: ${error.message}`, 'red');
                     return null;
                 }
@@ -356,34 +398,31 @@
                 return `${day}-${month}-${year}`;
             };
 
-            const convertNumberToEnglishWords = (num) => {
-                const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
-                const teens = ['', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-                const tens = ['', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-                const thousands = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
+            const convertNumberToWords = (num) => {
+                const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+                const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+                const inWords = (n) => {
+                    let str = '';
+                    if (n < 20) {
+                        str = a[n];
+                    } else {
+                        str = b[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + a[n % 10] : '');
+                    }
+                    return str;
+                };
 
                 const convert = (n) => {
                     let s = '';
-                    if (n < 10) s = units[n];
-                    else if (n < 20) s = teens[n - 10];
-                    else if (n < 100) s = tens[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + units[n % 10] : '');
-                    else s = units[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' and ' + convert(n % 100) : '');
+                    if (n < 100) s = inWords(n);
+                    else if (n < 1000) s = a[Math.floor(n / 100)] + 'hundred ' + (n % 100 !== 0 ? inWords(n % 100) : '');
+                    else if (n < 100000) s = convert(Math.floor(n / 1000)) + 'thousand ' + (n % 1000 !== 0 ? convert(n % 1000) : '');
+                    else if (n < 10000000) s = convert(Math.floor(n / 100000)) + 'lakh ' + (n % 100000 !== 0 ? convert(n % 100000) : '');
                     return s;
                 };
-
+                
                 if (num === 0) return 'Zero';
-                let words = '';
-                let i = 0;
-                while (num > 0) {
-                    const chunk = num % 1000;
-                    if (chunk !== 0) {
-                        const chunkWords = convert(chunk);
-                        words = chunkWords + ' ' + thousands[i] + ' ' + words;
-                    }
-                    num = Math.floor(num / 1000);
-                    i++;
-                }
-                return 'Rupees ' + words.trim() + ' Only';
+                return 'Rupees ' + convert(num).trim().replace(/\s+/g, ' ') + ' Only';
             };
             
             // Function to generate the PDF
@@ -403,7 +442,7 @@
                 const dueDate = formatDate(estimateDate.toISOString().split('T')[0]);
                 
                 const grandTotalAmount = parseFloat(grandTotal) || 0;
-                const amountInWords = convertNumberToEnglishWords(grandTotalAmount);
+                const amountInWords = convertNumberToWords(grandTotalAmount);
                 const pdfContent = document.createElement('div');
                 pdfContent.className = 'pdf-container';
                 
@@ -573,7 +612,7 @@
                                 document.getElementById('discount-display').textContent = `${parseFloat(estimateData.discount)}%`;
                                 document.getElementById('grand-total-display').textContent = `₹ ${parseFloat(estimateData.grandTotal).toFixed(2)}`;
                                 const grandTotalAmount = parseFloat(estimateData.grandTotal) || 0;
-                                document.getElementById('amount-in-words-display').textContent = convertNumberToEnglishWords(grandTotalAmount);
+                                document.getElementById('amount-in-words-display').textContent = convertNumberToWords(grandTotalAmount);
 
                                 const itemsContainerDisplay = document.getElementById('items-container-display');
                                 itemsContainerDisplay.innerHTML = '';
@@ -599,19 +638,19 @@
                                 }
                                 
                                 acceptBtn.addEventListener('click', async () => {
-                                    if (confirm('Are you sure you want to accept this estimate?')) {
+                                    if (confirm('Do you want to accept this estimate?')) {
                                         const dataToUpdate = {
                                             estimateNumber: estimateData.estimateNumber,
                                             status: 'Accepted'
                                         };
                                         const result = await postDataToGoogleSheet({ action: 'updateStatus', data: dataToUpdate });
                                         if (result.status === 'success') {
-                                            let message = `Hello, Estimate number ${estimateData.estimateNumber} has been accepted by the customer.`;
+                                            let message = `Hello,\n\nEstimate number ${estimateData.estimateNumber} has been accepted by the customer.\n\nWork Title: ${estimateData.workTitle}\nEstimate Date: ${formatDate(estimateData.date)}\nGrand Total: ₹ ${parseFloat(estimateData.grandTotal).toFixed(2)}`;
                                             if (estimateData.creatorWhatsapp) {
                                                 const whatsappUrl = `https://wa.me/${estimateData.creatorWhatsapp}?text=${encodeURIComponent(message)}`;
                                                 window.open(whatsappUrl, '_blank');
                                             }
-                                            showMessage(messageBoxCustomer, 'Estimate accepted successfully!', 'green');
+                                            showMessage(messageBoxCustomer, 'Estimate successfully accepted!', 'green');
                                             acceptBtn.disabled = true;
                                             acceptBtn.textContent = 'Accepted';
                                             acceptBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
@@ -644,7 +683,6 @@
                 customerView.classList.add('hidden');
                 const itemsContainer = document.getElementById('items-container');
                 const addItemBtn = document.getElementById('add-item-btn');
-                const newEstimateBtn = document.getElementById('new-estimate-btn');
                 const subtotalEl = document.getElementById('subtotal');
                 const discountAmountInput = document.getElementById('discount-amount');
                 const grandTotalEl = document.getElementById('grand-total');
@@ -662,6 +700,18 @@
                 const loadSelectedBtn = document.getElementById('load-selected-btn');
                 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
                 let loadedEstimates = [];
+                
+                prevPageBtn.addEventListener('click', () => {
+                    if (currentPage > 0) {
+                        showPage(currentPage - 1);
+                    }
+                });
+
+                nextPageBtn.addEventListener('click', () => {
+                    if (currentPage < pages.length - 1) {
+                        showPage(currentPage + 1);
+                    }
+                });
 
                 const loadEstimatesToDropdown = async () => {
                     const estimates = await getEstimateFromSheet('getall');
@@ -698,7 +748,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Description (Optional)</label>
-                                    <textarea class="item-description mt-1 block w-full p-2.5" rows="2" placeholder="e.g., Installation of 100 ft wiring and setup.">${item.description || ''}</textarea>
+                                    <textarea class="item-description mt-1 block w-full p-2.5" rows="2" placeholder="e.g., Installation of 100 feet of wiring and setup." >${item.description || ''}</textarea>
                                 </div>
                             </div>
                             <button type="button" class="delete-item-btn ml-2 mt-1 p-2 text-red-500 hover:text-red-700 transition duration-200" title="Delete Item">
@@ -753,7 +803,7 @@
 
                     subtotalEl.textContent = `₹ ${subtotal.toFixed(2)}`;
                     grandTotalEl.textContent = `₹ ${grandTotal.toFixed(2)}`;
-                    amountInWordsEl.textContent = convertNumberToEnglishWords(grandTotal);
+                    amountInWordsEl.textContent = convertNumberToWords(grandTotal);
                 };
 
                 const populateForm = (data) => {
@@ -770,7 +820,7 @@
                         dateInput.value = '';
                     }
                     
-                    creatorWhatsappInput.value = data['Your WhatsApp Number'] || '';
+                    creatorWhatsappInput.value = data['Your WhatsApp Number'] || '9049764945';
                     discountAmountInput.value = parseFloat(data['Discount']) || 0;
 
                     itemsContainer.innerHTML = '';
@@ -780,7 +830,7 @@
                             items.forEach(item => addItemRow(item));
                         } catch (e) {
                             console.error("Error parsing items JSON:", e);
-                            showMessage(messageBoxCreator, 'Error loading item details from saved estimate.', 'red');
+                            showMessage(messageBoxCreator, 'Error loading item details from the saved estimate.', 'red');
                         }
                     } else {
                         addItemRow();
@@ -805,8 +855,7 @@
                         calculateTotals();
                     }
                 });
-
-                // **New code to handle contact picker**
+                
                 openContactsBtn.addEventListener('click', async () => {
                     try {
                         const available = ('contacts' in navigator && 'ContactsManager' in window);
@@ -821,14 +870,13 @@
                                 customerWhatsappInput.value = contact.tel[0] || '';
                             }
                         } else {
-                            showMessage(messageBoxCreator, 'Contact Picker API not supported in this browser.', 'red');
+                            showMessage(messageBoxCreator, 'Contact Picker API is not supported in this browser.', 'red');
                         }
                     } catch (error) {
                         console.error('Error selecting contacts:', error);
                         showMessage(messageBoxCreator, 'Failed to access contacts. Please grant permissions.', 'red');
                     }
                 });
-                // **End of new code**
 
                 shareWhatsappBtn.addEventListener('click', async () => {
                     const customerName = customerNameInput.value;
@@ -854,7 +902,7 @@
                     });
 
                     if (!customerName || !customerWhatsapp || !workTitle || !estimateNumber || !date) {
-                        showMessage(messageBoxCreator, 'Please fill out all required fields.', 'red');
+                        showMessage(messageBoxCreator, 'Please fill in all required fields.', 'red');
                         return;
                     }
 
@@ -873,10 +921,10 @@
                     };
                     const result = await postDataToGoogleSheet({ action: 'save', data: formData });
                     if (result.status === 'success') {
-                        const whatsappMessage = `Hello ${customerName},\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: https://vai27717.github.io/mobile-estimate-app/?view=customer&id=${estimateNumber}\n\nThank you for connecting with Vaibhav Enterprises.\nVisit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
+                        const whatsappMessage = `Hello ${customerName},\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: https://vai27717.github.io/mobile-estimate-app/?view=customer&id=${estimateNumber}\n\nThank you for connecting with Vaibhav Enterprises. Visit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
                         const whatsappUrl = `https://wa.me/${customerWhatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
                         window.open(whatsappUrl, '_blank');
-                        showMessage(messageBoxCreator, 'Estimate saved and sent successfully! Please check WhatsApp.', 'green');
+                        showMessage(messageBoxCreator, 'Estimate successfully saved and sent! Please check WhatsApp.', 'green');
                         resetForm();
                     } else {
                         showMessage(messageBoxCreator, `Error: ${result.error}`, 'red');
@@ -905,7 +953,7 @@
                     });
 
                     if (!customerName || !workTitle || !estimateNumber || !date) {
-                        showMessage(messageBoxCreator, 'Please fill out all required fields to generate PDF.', 'red');
+                        showMessage(messageBoxCreator, 'Please fill in all required fields to generate a PDF.', 'red');
                         return;
                     }
 
@@ -924,14 +972,11 @@
                     generatePDF(formData);
                 });
                 
-                newEstimateBtn.addEventListener('click', resetForm);
-
                 loadSelectedBtn.addEventListener('click', async () => {
                     const estimateNumber = savedEstimatesDropdown.value;
                     if (estimateNumber) {
                         const selectedEstimate = loadedEstimates.find(e => e['Estimate Number'] === estimateNumber);
                         if (selectedEstimate) {
-                            // The Google script returns a flat object, so we need to structure it.
                             const formattedData = {
                                 'Customer Name': selectedEstimate['Customer Name'],
                                 'Customer Whatsapp': selectedEstimate['Customer Whatsapp'],
@@ -972,8 +1017,12 @@
                 });
 
                 // Initial setup
-                resetForm();
-                loadEstimatesToDropdown();
+                const resetApp = () => {
+                    resetForm();
+                    showPage(0); // Show the first page initially
+                };
+                resetApp();
+                
             }
         });
     </script>
