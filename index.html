@@ -552,9 +552,6 @@
                 if (estimateId) {
                     getEstimateFromSheet('getsingle', estimateId)
                         .then(data => {
-                            // Added this console.log for debugging purposes
-                            console.log("Fetched data from Google Sheet:", data);
-                            
                             // Check if data is received and contains the required fields
                             if (data && data['Estimate Number']) {
                                 estimateData = {
@@ -636,16 +633,13 @@
                                 });
                             } else {
                                 showMessage(messageBoxCustomer, 'Estimate data not found.', 'red');
-                                console.error('Estimate data not found or invalid data received.');
                             }
                         })
                         .catch(error => {
                             showMessage(messageBoxCustomer, 'Something went wrong while loading the estimate.', 'red');
-                            console.error('Error in getEstimateFromSheet promise:', error);
                         });
                 } else {
                     showMessage(messageBoxCustomer, 'Estimate ID not available.', 'red');
-                    console.error('Estimate ID not available in URL.');
                 }
 
             } else {
