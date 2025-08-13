@@ -129,7 +129,7 @@
                     
                     <div>
                         <label for="creator-whatsapp" class="block text-sm font-medium text-gray-700">Your WhatsApp Number (for notifications)</label>
-                        <input type="tel" id="creator-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210">
+                        <input type="tel" id="creator-whatsapp" class="mt-1 block w-full p-2.5" placeholder="e.g., +919876543210" value="9049764945">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -186,7 +186,7 @@
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h2 class="text-xl font-semibold mb-3 text-gray-700">Item List</h2>
                         <div id="items-container-display" class="space-y-4">
-                            </div>
+                        </div>
                     </div>
                 
                     <div class="bg-gray-50 p-4 rounded-lg space-y-2">
@@ -248,7 +248,6 @@
 
             // --- Google Scripts URL - Please replace with your new deployed URL ---
             const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbzvNcf7sgWgIO5gsWw9MRYhXZIFLD1ct1Ha1ZPbhpH43UhS-XHCdt8pDecnhjJFV0uH/exec';
-
             function showLoading() {
                 loadingScreen.classList.remove('hidden');
             }
@@ -281,7 +280,6 @@
                     return { status: 'error', error: error.message };
                 }
             };
-
             const getEstimateFromSheet = async (action, estimateNumber = null) => {
                 showLoading();
                 let url = `${googleScriptUrl}?action=${action}`;
@@ -304,7 +302,6 @@
                     return null;
                 }
             };
-
             const deleteEstimateFromSheet = async (estimateNumber) => {
                 showLoading();
                 const payload = new FormData();
@@ -329,7 +326,6 @@
                     return { status: 'error', error: error.message };
                 }
             };
-
             // --- End Google Sheets Integration Setup ---
 
             // Function to display messages
@@ -676,7 +672,6 @@
                         });
                     }
                 };
-
                 const generateNewEstimateNumber = async () => {
                     const today = new Date();
                     const formattedDate = today.toISOString().split('T')[0];
@@ -685,7 +680,6 @@
                     const newCount = Array.isArray(estimates) ? estimates.length + 1 : 1;
                     estimateNumberInput.value = `EST-${newCount.toString().padStart(4, '0')}`;
                 };
-
                 const addItemRow = (item = {}) => {
                     const itemRow = document.createElement('div');
                     itemRow.className = 'item-row bg-white p-3 rounded-lg shadow-sm';
@@ -805,7 +799,6 @@
                         calculateTotals();
                     }
                 });
-
                 // **New code to handle contact picker**
                 openContactsBtn.addEventListener('click', async () => {
                     try {
@@ -882,7 +875,6 @@
                         showMessage(messageBoxCreator, `Error: ${result.error}`, 'red');
                     }
                 });
-
                 generatePdfBtn.addEventListener('click', () => {
                     const customerName = customerNameInput.value;
                     const workTitle = workTitleInput.value;
@@ -952,7 +944,6 @@
                         showMessage(messageBoxCreator, 'Please select an estimate to load.', 'red');
                     }
                 });
-
                 deleteSelectedBtn.addEventListener('click', async () => {
                     const estimateNumber = savedEstimatesDropdown.value;
                     if (estimateNumber) {
@@ -970,7 +961,6 @@
                         showMessage(messageBoxCreator, 'Please select an estimate to delete.', 'red');
                     }
                 });
-
                 // Initial setup
                 resetForm();
                 loadEstimatesToDropdown();
