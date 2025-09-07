@@ -539,28 +539,40 @@ erprizes.info" style="color: #333; text-decoration: none;">www.vaibhaventerprise
                                 }
                                 
                                 acceptBtn.addEventListener('click', async () => {
-                                    if (confirm('Are you sure you want to accept this estimate?')) {
-                                        const dataToUpdate = {
-                                            estimateNumber: estimateData.estimateNumber,
-                                            status: 'Accepted'
-                                        };
-                                        const result = await postDataToGoogleSheet({ action: 'updateStatus', data: dataToUpdate });
-                                        if (result.status === 'success') {
-                                            let message = `Hello, Estimate number ${estimateData.estimateNumber} has been accepted by the customer.`;
-                                            if (estimateData.creatorWhatsapp) {
-                                                const whatsappUrl = `https://wa.me/${estimateData.creatorWhatsapp}?text=${encodeURIComponent(message)}`;
-                                                window.open(whatsappUrl, '_blank');
-                                            }
-                                            showMessage(messageBoxCustomer, 'Estimate accepted successfully!', 'green');
-                                            acceptBtn.disabled = true;
-                                            acceptBtn.textContent = 'Accepted';
-                                            acceptBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
-                                            acceptBtn.classList.add('bg-gray-400');
-                                        } else {
-                                            showMessage(messageBoxCustomer, 'Failed to accept estimate. Please try again.', 'red');
-                                        }
-                                    }
-                                });
+    if (confirm('Are you sure you want to accept this estimate?')) {
+        try {
+            const payload = new FormData();
+            payload.append('action', 'accept');
+            payload.append('estimateNumber', estimateData.estimateNumber);
+
+            const response = await fetch(googleScriptUrl, {
+                method: 'POST',
+                body: payload,
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                let message = `Hello, Estimate number ${estimateData.estimateNumber} has been accepted by the customer.`;
+                if (estimateData.creatorWhatsapp) {
+                    const whatsappUrl = `https://wa.me/${estimateData.creatorWhatsapp}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                }
+                showMessage(messageBoxCustomer, 'Estimate accepted successfully!', 'green');
+                acceptBtn.disabled = true;
+                acceptBtn.textContent = 'Accepted';
+                acceptBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
+                acceptBtn.classList.add('bg-gray-400');
+            } else {
+                showMessage(messageBoxCustomer, 'Failed to accept estimate. Please try again.', 'red');
+            }
+        } catch (error) {
+            console.error('Error accepting estimate:', error);
+            showMessage(messageBoxCustomer, 'Error while accepting the estimate.', 'red');
+        }
+    }
+});
+
                                 downloadPdfBtn.addEventListener('click', () => {
                                     if (estimateData) {
                                         generatePDF(estimateData);
@@ -919,4 +931,3 @@ erprizes.info" style="color: #333; text-decoration: none;">www.vaibhaventerprise
     </script>
 </body>
 </html>
-
