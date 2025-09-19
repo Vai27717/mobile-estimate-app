@@ -825,7 +825,8 @@ erprizes.info" style="color: #333; text-decoration: none;">www.vaibhaventerprise
                     };
                     const result = await postDataToGoogleSheet({ action: 'save', data: formData });
                     if (result.status === 'success') {
-                        const whatsappMessage = `Hello ${customerName},\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: https://vai27717.github.io/mobile-estimate-app/?view=customer&id=${estimateNumber}\n\nThank you for connecting with Vaibhav Enterprises.\nVisit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
+                        const whatsappMessage = `Dear,\nSir/Madam\nClient Name: ${customerName}\nContact No: ${customerWhatsapp}\n\nYour estimate is ready. Click the link below to view it.\n\nOpen Estimate Details: https://vai27717.github.io/mobile-estimate-app/?view=customer&id=${estimateNumber}\n\nThank you for connecting with Vaibhav Enterprises.\nVisit our site to see our renovation services:\nhttp://www.vaibhaventerprises.info`;
+
                         const whatsappUrl = `https://wa.me/${customerWhatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
                         window.open(whatsappUrl, '_blank');
                         showMessage(messageBoxCreator, 'Estimate saved and sent successfully! Please check WhatsApp.', 'green');
@@ -931,3 +932,4 @@ erprizes.info" style="color: #333; text-decoration: none;">www.vaibhaventerprise
     </script>
 </body>
 </html>
+
